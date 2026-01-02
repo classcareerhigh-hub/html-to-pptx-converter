@@ -2,208 +2,413 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <title>Career High PT Converter (Strict Mode)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Career High Strategy Deck: ZENITH V7</title>
   
-  <!-- 라이브러리 로드 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.min.js"></script>
 
   <style>
-    /* UI 스타일 (기존과 동일하므로 축약) */
+    /* V7 ZENITH UI - Transcendence */
+    :root { 
+        --core: #6366f1; /* Indigo */
+        --bg: #0f172a; 
+        --panel: #1e293b; 
+        --text: #f8fafc;
+        --success: #10b981;
+    }
+    
     * { margin:0; padding:0; box-sizing:border-box; }
-    body { font-family:-apple-system, sans-serif; background:#F4F6F8; padding:20px; display:flex; justify-content:center; }
-    .container { width:100%; max-width:1000px; background:white; padding:40px; border-radius:16px; box-shadow:0 4px 20px rgba(0,0,0,0.08); }
-    h1 { color:#0071EC; text-align:center; margin-bottom:30px; }
-    textarea { width:100%; height:300px; padding:15px; border:2px solid #E5E7EB; border-radius:8px; font-family:'Consolas', monospace; resize:vertical; }
-    button { background:#0071EC; color:white; border:none; padding:15px; width:100%; border-radius:8px; font-size:18px; font-weight:bold; cursor:pointer; margin-top:20px; }
-    button:hover { background:#005bbd; }
-    .status { margin-top:20px; text-align:center; font-weight:bold; color:#0071EC; }
+    
+    body { 
+        font-family: 'Inter', 'Pretendard', sans-serif; 
+        background: var(--bg); color: var(--text);
+        height: 100vh; display: flex; overflow: hidden;
+    }
+    
+    .layout { display: grid; grid-template-columns: 360px 1fr; width: 100%; height: 100%; }
+    
+    /* Left Panel: Intelligence */
+    .sidebar { 
+        background: var(--panel); border-right: 1px solid #334155;
+        padding: 30px; display: flex; flex-direction: column; gap: 20px;
+        box-shadow: 10px 0 30px rgba(0,0,0,0.3); z-index: 10;
+    }
+    
+    .brand { font-size: 24px; font-weight: 900; letter-spacing: -1px; margin-bottom: 10px; }
+    .brand span { color: var(--core); }
+    
+    .status-card {
+        background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+        padding: 15px; border-radius: 8px; font-size: 13px;
+    }
+    .status-item { display: flex; justify-content: space-between; margin-bottom: 8px; }
+    .status-val { font-family: monospace; color: var(--core); }
+
+    .btn-generate {
+        background: var(--core); color: white; border: none;
+        padding: 18px; border-radius: 8px; font-weight: 700; font-size: 15px;
+        cursor: pointer; margin-top: auto; transition: 0.2s;
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+    }
+    .btn-generate:hover { background: #4f46e5; transform: translateY(-2px); }
+    .btn-generate:disabled { background: #475569; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* Right Panel: Editor */
+    .editor-area { display: flex; flex-direction: column; background: #0b0f19; }
+    
+    .editor-header {
+        padding: 15px 30px; border-bottom: 1px solid #334155;
+        font-size: 12px; color: #94a3b8; font-weight: 600; text-transform: uppercase;
+        display: flex; justify-content: space-between;
+    }
+    
+    textarea {
+        flex: 1; width: 100%; border: none; padding: 40px;
+        background: transparent; color: #e2e8f0;
+        font-family: 'D2Coding', monospace; font-size: 14px; line-height: 1.7;
+        resize: none; outline: none;
+    }
+
+    /* Helper Classes for User Input */
+    .hint { font-size: 11px; color: #64748b; margin-top: 5px; }
+    .tag { display: inline-block; padding: 2px 6px; background: #334155; border-radius: 4px; font-family: monospace; font-size: 11px; }
+
   </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1>Career High PT Generator (Strict)</h1>
-    <textarea id="htmlInput" placeholder="Claude가 생성한 HTML 코드를 여기에 붙여넣으세요..."></textarea>
-    <button id="convertBtn">PPTX로 변환하기 (Strict Mode)</button>
-    <div id="statusMessage" class="status"></div>
+<div class="layout">
+    <div class="sidebar">
+        <div class="brand">ZENITH <span>V7</span></div>
+        <p style="font-size:13px; color:#94a3b8; line-height:1.5;">
+            Self-Correcting Layout Engine with Auto-Pagination.
+        </p>
+        
+        <div class="status-card">
+            <div style="font-weight:700; margin-bottom:10px; color:#fff;">INTELLIGENCE CORE</div>
+            <div class="status-item">
+                <span>Overflow Check</span>
+                <span class="status-val">ACTIVE</span>
+            </div>
+            <div class="status-item">
+                <span>Header Cloning</span>
+                <span class="status-val">ACTIVE</span>
+            </div>
+            <div class="status-item">
+                <span>Semantic Color</span>
+                <span class="status-val">ACTIVE</span>
+            </div>
+        </div>
+
+        <div class="hint">
+            <strong>New Classes Supported:</strong><br>
+            <span class="tag">.text-red</span> <span class="tag">.text-green</span> <span class="tag">.indent</span>
+        </div>
+
+        <div id="msgBox" style="font-size:12px; text-align:center; min-height:20px; color:#10b981;"></div>
+        <button id="genBtn" class="btn-generate">INITIALIZE ZENITH</button>
+    </div>
+
+    <div class="editor-area">
+        <div class="editor-header">
+            <span>HTML SOURCE</span>
+            <span>UTF-8 MODE</span>
+        </div>
+        <textarea id="input" placeholder='<div class="slide">
+  <div class="action-title">시장 분석 결과</div>
+  <div class="content">
+    <div class="row">
+       <div class="box">
+         <div class="box-title">리스크 요인</div>
+         <p class="text-red">경쟁사의 공격적 마케팅</p>
+       </div>
+    </div>
   </div>
+</div>'></textarea>
+    </div>
+</div>
 
-  <script>
-    const convertBtn = document.getElementById('convertBtn');
-    const htmlInput = document.getElementById('htmlInput');
-    const statusMessage = document.getElementById('statusMessage');
+<script>
+    const genBtn = document.getElementById('genBtn');
+    const input = document.getElementById('input');
+    const msgBox = document.getElementById('msgBox');
 
-    // [중요] PPTX 좌표/크기 상수 정의 (단위: 인치)
-    // 16:9 슬라이드 크기 = 10 x 5.625 인치
-    const LAYOUT = {
-        MARGIN_LEFT: 0.5,
-        width: 9.0, // 좌우 여백 0.5씩 뺌
-        y_h2: 0.4,  // 소제목 위치
-        y_h1: 0.8,  // 대제목 위치
-        y_body: 2.0 // 본문 시작 위치
+    // ★ ZENITH CONFIGURATION ★
+    const CONF = {
+        primary: '0071EC',
+        danger: 'DC2626', // Red
+        success: '059669', // Green
+        text: '1F2937',
+        muted: '4B5563',
+        bgBox: 'F3F4F6',
+        line: 'E5E7EB',
+        font: "Malgun Gothic",
+        
+        // Layout Limits
+        slideH: 5.625, // 16:9 Height (inches)
+        footerY: 5.2,  // Footer Line
+        margin: 0.5,
+        contentW: 9.0,
+        headerBottom: 1.4 // Where content starts
     };
 
-    convertBtn.addEventListener('click', async () => {
-      const html = htmlInput.value.trim();
-      if (!html) return alert('HTML 코드를 입력하세요.');
+    function uiMsg(txt, isErr) {
+        msgBox.textContent = txt;
+        msgBox.style.color = isErr ? '#EF4444' : '#10B981';
+    }
 
-      convertBtn.disabled = true;
-      convertBtn.textContent = '변환 중...';
+    genBtn.addEventListener('click', async () => {
+        const html = input.value.trim();
+        if(!html) return uiMsg('No Input Code', true);
 
-      try {
-        let pptx = new PptxGenJS();
-        pptx.layout = 'LAYOUT_16x9';
-        pptx.author = 'Career High';
-        pptx.title = 'Presentation';
+        uiMsg('Processing...');
+        genBtn.disabled = true;
 
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-        const slides = doc.querySelectorAll('.slide');
-
-        if (slides.length === 0) throw new Error('슬라이드(.slide)를 찾을 수 없습니다.');
-
-        slides.forEach((slideElem) => {
-          const slide = pptx.addSlide();
-          slide.background = { color: 'FFFFFF' };
-
-          // Y축 커서 (현재 높이 추적)
-          let currentY = LAYOUT.y_body;
-
-          // 1. 소제목 (H2) - 고정 위치
-          const h2 = slideElem.querySelector('h2');
-          if (h2) {
-            slide.addText(h2.textContent.trim(), {
-              x: LAYOUT.MARGIN_LEFT, y: LAYOUT.y_h2, w: LAYOUT.width, h: 0.3,
-              fontSize: 14, color: '0071EC', bold: true, fontFace: 'Arial'
-            });
-          }
-
-          // 2. 대제목 (H1) - 고정 위치
-          const h1 = slideElem.querySelector('h1');
-          if (h1) {
-            let titleText = h1.innerHTML.replace(/<br\s*\/?>/gi, '\n');
-            const temp = document.createElement('div');
-            temp.innerHTML = titleText;
+        try {
+            let pptx;
+            if (typeof window.PptxGenJS === 'function') pptx = new window.PptxGenJS();
+            else pptx = new PptxGenJS();
             
-            slide.addText(temp.textContent, {
-              x: LAYOUT.MARGIN_LEFT, y: LAYOUT.y_h1, w: LAYOUT.width,
-              fontSize: 36, color: '111111', bold: true, fontFace: 'Arial',
-              lineSpacing: 42 // 줄간격 꽉 조임
-            });
-          }
+            pptx.layout = 'LAYOUT_16x9';
+            pptx.author = 'Zenith AI';
 
-          // --- 여기서부터 유동 콘텐츠 ---
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const slides = doc.querySelectorAll('.slide');
 
-          // 3. Key Box (강조 박스)
-          const keyBox = slideElem.querySelector('.key-box');
-          if (keyBox) {
-            // 박스 그리기
-            slide.addShape(pptx.ShapeType.rect, {
-              x: LAYOUT.MARGIN_LEFT, y: currentY, w: LAYOUT.width, h: 0.9,
-              fill: { color: 'F0F7FF' },
-              line: { color: '0071EC', width: 2 } // 전체 테두리로 변경하여 깔끔함 유지
-            });
-            // 텍스트 넣기
-            slide.addText(keyBox.textContent.trim(), {
-              x: LAYOUT.MARGIN_LEFT + 0.2, y: currentY + 0.1, w: LAYOUT.width - 0.4,
-              fontSize: 16, color: '004085', bold: true, fontFace: 'Arial',
-              align: 'left'
-            });
-            currentY += 1.2; // 박스 높이 + 여백만큼 이동
-          }
+            slides.forEach((slideElem, idx) => {
+                // --- 1. Header Analysis (Context Extraction) ---
+                const titleNode = slideElem.querySelector('.action-title, h1');
+                const titleText = titleNode ? titleNode.textContent.trim() : '';
+                const isCover = (idx === 0 && slideElem.querySelector('.big-stat'));
 
-          // 4. 본문 (P)
-          const ps = slideElem.querySelectorAll('p:not(.key-box)');
-          ps.forEach(p => {
-             // 텍스트 길이 체크하여 높이 계산 (대략적)
-             const textLen = p.textContent.length;
-             const estHeight = textLen > 80 ? 0.8 : 0.4;
+                // Create initial slide
+                let slide = pptx.addSlide();
+                let curY = renderHeader(slide, titleText, isCover, slideElem);
+                let pageIndex = 1;
 
-             slide.addText(p.textContent.trim(), {
-               x: LAYOUT.MARGIN_LEFT, y: currentY, w: LAYOUT.width, h: estHeight,
-               fontSize: 16, color: '333333', fontFace: 'Arial', lineSpacing: 22,
-               align: 'justify' // 양쪽 정렬로 깔끔하게
-             });
-             currentY += estHeight + 0.2;
-          });
-
-          // 5. 리스트 (UL)
-          const ul = slideElem.querySelector('ul');
-          if (ul) {
-            const lis = ul.querySelectorAll('li');
-            lis.forEach(li => {
-              slide.addText('• ' + li.textContent.trim(), {
-                x: LAYOUT.MARGIN_LEFT + 0.2, y: currentY, w: LAYOUT.width - 0.2, h: 0.4,
-                fontSize: 15, color: '444444', fontFace: 'Arial'
-              });
-              currentY += 0.45;
-            });
-            currentY += 0.2;
-          }
-
-          // 6. 데이터 표 (Table) - 가장 중요!
-          const table = slideElem.querySelector('table');
-          if (table) {
-            const rows = [];
-            
-            // 헤더 처리
-            const thead = table.querySelector('thead');
-            if (thead) {
-              const ths = thead.querySelectorAll('th');
-              rows.push(Array.from(ths).map(th => ({
-                text: th.textContent.trim(),
-                options: { 
-                  fill: '0071EC', color: 'FFFFFF', bold: true, 
-                  fontSize: 12, align: 'center', valign: 'middle'
+                if(isCover) {
+                    // 표지는 페이지네이션 로직 제외
+                    return; 
                 }
-              })));
-            }
 
-            // 본문 처리
-            const trs = table.querySelectorAll('tbody tr');
-            trs.forEach(tr => {
-              const tds = tr.querySelectorAll('td');
-              rows.push(Array.from(tds).map(td => ({
-                text: td.textContent.trim(),
-                options: { 
-                  fontSize: 11, color: '333333', fill: 'FFFFFF', 
-                  align: 'center', valign: 'middle',
-                  border: { pt: 1, color: 'E1E1E1' } // 셀 테두리 연하게
-                }
-              })));
+                // --- 2. Intelligent Content Loop (With Pagination) ---
+                const contentDiv = slideElem.querySelector('.content') || slideElem;
+                
+                // Get all logical blocks (rows or standalone elements)
+                // Filter out header elements
+                const blocks = Array.from(contentDiv.children).filter(el => 
+                    !el.classList.contains('header') && 
+                    !el.classList.contains('action-title') &&
+                    !el.classList.contains('footer')
+                );
+
+                blocks.forEach(block => {
+                    // [Pre-Calculation]
+                    // 블록을 렌더링하기 전에 높이를 예측합니다.
+                    let blockHeight = 0;
+                    let isRow = block.classList.contains('row');
+
+                    if (isRow) {
+                        const cols = Array.from(block.children);
+                        const gap = 0.2;
+                        const colW = (CONF.contentW - (gap * (cols.length - 1))) / cols.length;
+                        
+                        // Row의 높이는 가장 긴 Col의 높이
+                        let maxColH = 0;
+                        cols.forEach(col => {
+                            const h = estimateBlockHeight(col, colW - 0.4); // padding 제외
+                            if(h > maxColH) maxColH = h;
+                        });
+                        blockHeight = Math.max(maxColH, 2.0); // 최소 높이
+                    } else {
+                        // 일반 블록 (Table or Text)
+                        if(block.tagName === 'TABLE' || block.classList.contains('data-table')) {
+                            blockHeight = (block.querySelectorAll('tr').length * 0.4) + 0.5;
+                        } else {
+                            blockHeight = estimateBlockHeight(block, CONF.contentW);
+                        }
+                    }
+
+                    // [Pagination Trigger]
+                    // 현재 위치 + 블록 높이가 Footer 영역을 침범하면 -> 새 슬라이드 생성
+                    if (curY + blockHeight > CONF.footerY) {
+                        // Add New Slide (Continuation)
+                        slide = pptx.addSlide();
+                        pageIndex++;
+                        
+                        // Header Copy (Context Retention)
+                        renderHeader(slide, titleText + ` (${pageIndex})`, false, null);
+                        curY = CONF.headerBottom; // Reset Y
+                    }
+
+                    // [Render]
+                    if (isRow) {
+                        renderRow(slide, block, curY, blockHeight);
+                    } else {
+                        renderBlock(slide, block, curY, blockHeight);
+                    }
+                    
+                    curY += blockHeight + 0.3; // Add Margin Bottom
+                });
+
+                // Footer Number
+                // (Note: PptxGenJS master slides are better for this, but simplistic approach here)
+                // 현재 코드 구조상 루프 내에서 처리하기 복잡하므로, 마지막 장 번호만 남거나 함.
+                // *Zenith Fix*: 페이지네이션 된 슬라이드들은 Loop 안에서 생성되므로, 
+                // 전역적으로 슬라이드 번호를 매기는 로직이 필요하나, 여기서는 단순화.
             });
 
-            if (rows.length > 0) {
-              slide.addTable(rows, {
-                x: LAYOUT.MARGIN_LEFT, y: currentY, w: LAYOUT.width,
-                rowH: 0.4, // 행 높이 고정
-                border: { color: '0071EC', pt: 2 } // 외곽 테두리 진하게
-              });
-              // 표 높이만큼 커서 이동 (행 개수 * 0.4)
-              currentY += (rows.length * 0.4) + 0.5;
-            }
-          }
+            await pptx.writeFile({ fileName: 'Zenith_V7_AutoPaging.pptx' });
+            uiMsg('Zenith Build Complete.', false);
 
-          // 7. 페이지 번호
-          const pageNum = slideElem.getAttribute('data-page');
-          if (pageNum) {
-            slide.addText(pageNum, { 
-              x: 9.2, y: 5.2, fontSize: 10, color: 'BBBBBB', bold: true 
-            });
-          }
-        });
-
-        await pptx.writeFile({ fileName: 'Presentation_Strict.pptx' });
-        statusMessage.textContent = '✅ 완료! 파일이 다운로드되었습니다.';
-
-      } catch (error) {
-        console.error(error);
-        alert('오류 발생: ' + error.message);
-        convertBtn.disabled = false;
-        convertBtn.textContent = 'PPTX로 변환하기 (Strict Mode)';
-      }
+        } catch (e) {
+            console.error(e);
+            uiMsg('Fatal Error: ' + e.message, true);
+        } finally {
+            genBtn.disabled = false;
+        }
     });
-  </script>
+
+    // --- ENGINE CORE ---
+
+    function renderHeader(slide, text, isCover, dom) {
+        slide.background = { color: 'FFFFFF' };
+        
+        if (isCover) {
+            // Cover Render Logic
+            slide.addText(text, { x:0.5, y:2.5, w:9, h:1.5, fontSize:44, color:CONF.primary, bold:true, align:'center', fontFace:CONF.font });
+            if(dom) {
+                const sub = dom.querySelector('.subtitle, h2');
+                if(sub) slide.addText(sub.textContent.trim(), { x:1, y:4, w:8, fontSize:20, color:CONF.muted, align:'center', fontFace:CONF.font });
+            }
+            return 6.0;
+        } else {
+            // Content Header
+            slide.addText(text, { x:0.5, y:0.4, w:9, fontSize:24, color:CONF.text, bold:true, fontFace:CONF.font, valign:'top' });
+            slide.addShape(pptx.ShapeType.line, { x:0.5, y:1.1, w:9, h:0, line:{color:CONF.primary, width:2} });
+            return CONF.headerBottom;
+        }
+    }
+
+    function estimateBlockHeight(el, w) {
+        let h = 0.4; // Base padding
+        if(el.querySelector('.box-title, h3')) h += 0.5;
+        if(el.querySelector('.big-stat')) h += 1.2;
+        
+        const texts = el.querySelectorAll('p, li, .box-text');
+        texts.forEach(t => {
+            const txt = t.textContent.trim();
+            if(!txt) return;
+            const lines = Math.ceil(txt.length / (w * 6.5));
+            h += (lines * 0.28) + 0.15;
+        });
+        return h;
+    }
+
+    function renderRow(slide, rowDom, y, height) {
+        const cols = Array.from(rowDom.children);
+        const gap = 0.2;
+        const colW = (CONF.contentW - (gap * (cols.length - 1))) / cols.length;
+
+        cols.forEach((col, i) => {
+            const x = CONF.margin + (i * (colW + gap));
+            
+            // Background
+            if(col.classList.contains('box') || col.querySelector('.box')) {
+                slide.addShape(pptx.ShapeType.roundRect, {
+                    x:x, y:y, w:colW, h:height,
+                    fill:{color:CONF.bgBox}, line:{color:CONF.line, width:1}
+                });
+            }
+
+            // Content (Vertical Center Logic from V6)
+            const contentH = estimateBlockHeight(col, colW - 0.4);
+            const offset = Math.max(0, (height - contentH) / 2); // Center alignment
+            
+            renderInnerContent(slide, col, x + 0.2, y + offset, colW - 0.4);
+        });
+    }
+
+    function renderBlock(slide, block, y, height) {
+        if(block.tagName === 'TABLE' || block.classList.contains('data-table')) {
+            // Table Render
+            const rows = [];
+            block.querySelectorAll('tr').forEach((tr, rIdx) => {
+                const rowData = [];
+                tr.querySelectorAll('td, th').forEach(cell => {
+                    const isHead = cell.tagName === 'TH' || tr.parentElement.tagName === 'THEAD';
+                    rowData.push({
+                        text: cell.textContent.trim(),
+                        options: {
+                            fill: isHead ? CONF.primary : (rIdx%2===0 ? 'FFFFFF' : 'F9FAFB'),
+                            color: isHead ? 'FFFFFF' : CONF.text,
+                            bold: isHead, fontSize:10, fontFace:CONF.font,
+                            border:{color:CONF.line, pt:1}, align: isHead ? 'center' : 'left'
+                        }
+                    });
+                });
+                rows.push(rowData);
+            });
+            if(rows.length > 0) slide.addTable(rows, { x:CONF.margin, y:y, w:CONF.contentW, rowH:0.4 });
+        } else {
+            // Standard Text Block
+            renderInnerContent(slide, block, CONF.margin, y, CONF.contentW);
+        }
+    }
+
+    function renderInnerContent(slide, el, x, y, w) {
+        let curY = y;
+
+        // Title
+        const title = el.querySelector('.box-title, h3');
+        if(title) {
+            slide.addText(title.textContent.trim(), {
+                x:x, y:curY, w:w, h:0.4, fontSize:14, color:CONF.primary, bold:true, fontFace:CONF.font
+            });
+            curY += 0.5;
+        }
+
+        // Big Stat
+        const stat = el.querySelector('.big-stat');
+        if(stat) {
+            slide.addText(stat.textContent.trim(), {
+                x:x, y:curY, w:w, h:0.8, fontSize:36, color:CONF.primary, bold:true, align:'center', fontFace:'Arial'
+            });
+            curY += 0.8;
+        }
+
+        // Text & Lists
+        const nodes = el.querySelectorAll('p, li, .box-text');
+        nodes.forEach(node => {
+            if(node.closest('.big-stat') || node.classList.contains('box-title')) return;
+            
+            const txt = node.textContent.trim();
+            const isList = node.tagName === 'LI';
+            
+            // Semantic Color Check
+            let color = CONF.muted;
+            if(node.classList.contains('text-red')) color = CONF.danger;
+            if(node.classList.contains('text-green')) color = CONF.success;
+            if(node.classList.contains('orange-text')) { color = CONF.primary; } // 호환성
+
+            // Indentation
+            let indent = 0;
+            if(node.classList.contains('indent')) indent = 1; // Simple indent logic
+
+            const lines = Math.ceil(txt.length / (w * 6.5));
+            const h = (lines * 0.28) + 0.1;
+
+            slide.addText(txt, {
+                x:x, y:curY, w:w, h:h, fontSize:11, color:color,
+                bullet: isList ? { indent:10 * (indent+1) } : false,
+                indentLevel: indent,
+                breakLine:true, fontFace:CONF.font
+            });
+            curY += h;
+        });
+    }
+</script>
 </body>
 </html>
