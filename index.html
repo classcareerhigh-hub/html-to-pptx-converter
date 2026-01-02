@@ -3,77 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Career High Strategy Deck: ZENITH V7</title>
+  <title>Career High Strategy Deck: ZENITH V7 (Final Fix)</title>
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.min.js"></script>
 
   <style>
-    /* V7 ZENITH UI - Transcendence */
-    :root { 
-        --core: #6366f1; /* Indigo */
-        --bg: #0f172a; 
-        --panel: #1e293b; 
-        --text: #f8fafc;
-        --success: #10b981;
-    }
-    
+    /* V7 ZENITH UI */
+    :root { --core: #6366f1; --bg: #0f172a; --panel: #1e293b; --text: #f8fafc; --success: #10b981; }
     * { margin:0; padding:0; box-sizing:border-box; }
-    
-    body { 
-        font-family: 'Inter', 'Pretendard', sans-serif; 
-        background: var(--bg); color: var(--text);
-        height: 100vh; display: flex; overflow: hidden;
-    }
-    
+    body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: var(--text); height: 100vh; display: flex; overflow: hidden; }
     .layout { display: grid; grid-template-columns: 360px 1fr; width: 100%; height: 100%; }
-    
-    /* Left Panel: Intelligence */
-    .sidebar { 
-        background: var(--panel); border-right: 1px solid #334155;
-        padding: 30px; display: flex; flex-direction: column; gap: 20px;
-        box-shadow: 10px 0 30px rgba(0,0,0,0.3); z-index: 10;
-    }
-    
-    .brand { font-size: 24px; font-weight: 900; letter-spacing: -1px; margin-bottom: 10px; }
+    .sidebar { background: var(--panel); border-right: 1px solid #334155; padding: 30px; display: flex; flex-direction: column; gap: 20px; z-index: 10; }
+    .brand { font-size: 24px; font-weight: 900; margin-bottom: 10px; }
     .brand span { color: var(--core); }
-    
-    .status-card {
-        background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-        padding: 15px; border-radius: 8px; font-size: 13px;
-    }
-    .status-item { display: flex; justify-content: space-between; margin-bottom: 8px; }
-    .status-val { font-family: monospace; color: var(--core); }
-
-    .btn-generate {
-        background: var(--core); color: white; border: none;
-        padding: 18px; border-radius: 8px; font-weight: 700; font-size: 15px;
-        cursor: pointer; margin-top: auto; transition: 0.2s;
-        box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
-    }
-    .btn-generate:hover { background: #4f46e5; transform: translateY(-2px); }
-    .btn-generate:disabled { background: #475569; cursor: not-allowed; transform: none; box-shadow: none; }
-
-    /* Right Panel: Editor */
+    .btn-generate { background: var(--core); color: white; border: none; padding: 18px; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: auto; }
+    .btn-generate:disabled { background: #475569; cursor: not-allowed; }
     .editor-area { display: flex; flex-direction: column; background: #0b0f19; }
-    
-    .editor-header {
-        padding: 15px 30px; border-bottom: 1px solid #334155;
-        font-size: 12px; color: #94a3b8; font-weight: 600; text-transform: uppercase;
-        display: flex; justify-content: space-between;
-    }
-    
-    textarea {
-        flex: 1; width: 100%; border: none; padding: 40px;
-        background: transparent; color: #e2e8f0;
-        font-family: 'D2Coding', monospace; font-size: 14px; line-height: 1.7;
-        resize: none; outline: none;
-    }
-
-    /* Helper Classes for User Input */
-    .hint { font-size: 11px; color: #64748b; margin-top: 5px; }
-    .tag { display: inline-block; padding: 2px 6px; background: #334155; border-radius: 4px; font-family: monospace; font-size: 11px; }
-
+    .editor-header { padding: 15px 30px; border-bottom: 1px solid #334155; font-size: 12px; color: #94a3b8; font-weight: 600; display: flex; justify-content: space-between; }
+    textarea { flex: 1; width: 100%; border: none; padding: 40px; background: transparent; color: #e2e8f0; font-family: 'D2Coding', monospace; font-size: 14px; line-height: 1.7; resize: none; outline: none; }
+    #msgBox { text-align: center; font-size: 12px; min-height: 20px; }
   </style>
 </head>
 <body>
@@ -81,51 +30,50 @@
 <div class="layout">
     <div class="sidebar">
         <div class="brand">ZENITH <span>V7</span></div>
-        <p style="font-size:13px; color:#94a3b8; line-height:1.5;">
-            Self-Correcting Layout Engine with Auto-Pagination.
-        </p>
-        
-        <div class="status-card">
-            <div style="font-weight:700; margin-bottom:10px; color:#fff;">INTELLIGENCE CORE</div>
-            <div class="status-item">
-                <span>Overflow Check</span>
-                <span class="status-val">ACTIVE</span>
-            </div>
-            <div class="status-item">
-                <span>Header Cloning</span>
-                <span class="status-val">ACTIVE</span>
-            </div>
-            <div class="status-item">
-                <span>Semantic Color</span>
-                <span class="status-val">ACTIVE</span>
-            </div>
-        </div>
-
-        <div class="hint">
-            <strong>New Classes Supported:</strong><br>
-            <span class="tag">.text-red</span> <span class="tag">.text-green</span> <span class="tag">.indent</span>
-        </div>
-
-        <div id="msgBox" style="font-size:12px; text-align:center; min-height:20px; color:#10b981;"></div>
+        <p style="font-size:13px; color:#94a3b8;">Text Detection Logic Patched.</p>
+        <div id="msgBox"></div>
         <button id="genBtn" class="btn-generate">INITIALIZE ZENITH</button>
     </div>
-
     <div class="editor-area">
-        <div class="editor-header">
-            <span>HTML SOURCE</span>
-            <span>UTF-8 MODE</span>
-        </div>
-        <textarea id="input" placeholder='<div class="slide">
-  <div class="action-title">시장 분석 결과</div>
+        <div class="editor-header"><span>HTML SOURCE</span><span>UTF-8 MODE</span></div>
+        <textarea id="input">
+<!DOCTYPE html>
+<html lang="ko">
+<head><meta charset="UTF-8"></head>
+<body>
+<div class="slide">
+  <div class="action-title">Future Talent Contest 기획안</div>
+  <div class="big-stat">Project "Physical OMO"</div>
+  <p class="subtitle">From "Probability" to "Asset": 보험업의 데이터 주권 선언</p>
+  <div style="margin-top: 50px;">
+    <p><strong>제출:</strong> 한화생명 전략기획팀</p>
+  </div>
+</div>
+<div class="slide">
+  <div class="action-title">Executive Summary</div>
   <div class="content">
+    <p style="font-size: 1.1em;">"우리는 보험금을 지급하는 회사가 아니라, <span class="orange-text">위험을 관리하는 회사</span>가 되어야 합니다."</p>
     <div class="row">
-       <div class="box">
-         <div class="box-title">리스크 요인</div>
-         <p class="text-red">경쟁사의 공격적 마케팅</p>
-       </div>
+      <div class="box">
+        <div class="box-title">AS-IS (Payer)</div>
+        <ul>
+          <li>사후적 확률 계산</li>
+          <li class="text-red">데이터 부족 및 고립</li>
+        </ul>
+      </div>
+      <div class="box">
+        <div class="box-title">TO-BE (Manager)</div>
+        <ul>
+          <li>사전적 리스크 관리</li>
+          <li class="text-green">실시간 데이터 댐 구축</li>
+        </ul>
+      </div>
     </div>
   </div>
-</div>'></textarea>
+</div>
+</body>
+</html>
+        </textarea>
     </div>
 </div>
 
@@ -133,24 +81,14 @@
     const genBtn = document.getElementById('genBtn');
     const input = document.getElementById('input');
     const msgBox = document.getElementById('msgBox');
+    
+    // ★ 전역 변수 선언 (Scope Fix) ★
+    let pptx;
 
-    // ★ ZENITH CONFIGURATION ★
     const CONF = {
-        primary: '0071EC',
-        danger: 'DC2626', // Red
-        success: '059669', // Green
-        text: '1F2937',
-        muted: '4B5563',
-        bgBox: 'F3F4F6',
-        line: 'E5E7EB',
-        font: "Malgun Gothic",
-        
-        // Layout Limits
-        slideH: 5.625, // 16:9 Height (inches)
-        footerY: 5.2,  // Footer Line
-        margin: 0.5,
-        contentW: 9.0,
-        headerBottom: 1.4 // Where content starts
+        primary: '0071EC', danger: 'DC2626', success: '059669', text: '1F2937', muted: '4B5563',
+        bgBox: 'F3F4F6', line: 'E5E7EB', font: "Malgun Gothic",
+        slideH: 5.625, footerY: 5.2, margin: 0.5, contentW: 9.0, headerBottom: 1.4
     };
 
     function uiMsg(txt, isErr) {
@@ -158,15 +96,28 @@
         msgBox.style.color = isErr ? '#EF4444' : '#10B981';
     }
 
+    // ★ 텍스트 노드 추출 도우미 함수 (핵심 수정) ★
+    // 요소 자체가 p/li 인 경우와, 자식으로 포함한 경우를 모두 처리
+    function getTextTargets(el) {
+        let targets = [];
+        // 1. 자기 자신이 텍스트 태그인 경우
+        if (el.matches && el.matches('p, li, .box-text')) {
+            targets.push(el);
+        } 
+        // 2. 자식 요소들 검색
+        const children = el.querySelectorAll('p, li, .box-text');
+        children.forEach(child => targets.push(child));
+        
+        return targets;
+    }
+
     genBtn.addEventListener('click', async () => {
         const html = input.value.trim();
         if(!html) return uiMsg('No Input Code', true);
-
         uiMsg('Processing...');
         genBtn.disabled = true;
 
         try {
-            let pptx;
             if (typeof window.PptxGenJS === 'function') pptx = new window.PptxGenJS();
             else pptx = new PptxGenJS();
             
@@ -178,26 +129,17 @@
             const slides = doc.querySelectorAll('.slide');
 
             slides.forEach((slideElem, idx) => {
-                // --- 1. Header Analysis (Context Extraction) ---
                 const titleNode = slideElem.querySelector('.action-title, h1');
                 const titleText = titleNode ? titleNode.textContent.trim() : '';
                 const isCover = (idx === 0 && slideElem.querySelector('.big-stat'));
 
-                // Create initial slide
                 let slide = pptx.addSlide();
                 let curY = renderHeader(slide, titleText, isCover, slideElem);
                 let pageIndex = 1;
 
-                if(isCover) {
-                    // 표지는 페이지네이션 로직 제외
-                    return; 
-                }
+                if(isCover) return; 
 
-                // --- 2. Intelligent Content Loop (With Pagination) ---
                 const contentDiv = slideElem.querySelector('.content') || slideElem;
-                
-                // Get all logical blocks (rows or standalone elements)
-                // Filter out header elements
                 const blocks = Array.from(contentDiv.children).filter(el => 
                     !el.classList.contains('header') && 
                     !el.classList.contains('action-title') &&
@@ -205,8 +147,6 @@
                 );
 
                 blocks.forEach(block => {
-                    // [Pre-Calculation]
-                    // 블록을 렌더링하기 전에 높이를 예측합니다.
                     let blockHeight = 0;
                     let isRow = block.classList.contains('row');
 
@@ -214,70 +154,48 @@
                         const cols = Array.from(block.children);
                         const gap = 0.2;
                         const colW = (CONF.contentW - (gap * (cols.length - 1))) / cols.length;
-                        
-                        // Row의 높이는 가장 긴 Col의 높이
                         let maxColH = 0;
                         cols.forEach(col => {
-                            const h = estimateBlockHeight(col, colW - 0.4); // padding 제외
+                            const h = estimateBlockHeight(col, colW - 0.4);
                             if(h > maxColH) maxColH = h;
                         });
-                        blockHeight = Math.max(maxColH, 2.0); // 최소 높이
+                        blockHeight = Math.max(maxColH, 2.0);
                     } else {
-                        // 일반 블록 (Table or Text)
-                        if(block.tagName === 'TABLE' || block.classList.contains('data-table')) {
+                        if(block.tagName === 'TABLE') {
                             blockHeight = (block.querySelectorAll('tr').length * 0.4) + 0.5;
                         } else {
                             blockHeight = estimateBlockHeight(block, CONF.contentW);
                         }
                     }
 
-                    // [Pagination Trigger]
-                    // 현재 위치 + 블록 높이가 Footer 영역을 침범하면 -> 새 슬라이드 생성
                     if (curY + blockHeight > CONF.footerY) {
-                        // Add New Slide (Continuation)
                         slide = pptx.addSlide();
                         pageIndex++;
-                        
-                        // Header Copy (Context Retention)
                         renderHeader(slide, titleText + ` (${pageIndex})`, false, null);
-                        curY = CONF.headerBottom; // Reset Y
+                        curY = CONF.headerBottom;
                     }
 
-                    // [Render]
-                    if (isRow) {
-                        renderRow(slide, block, curY, blockHeight);
-                    } else {
-                        renderBlock(slide, block, curY, blockHeight);
-                    }
+                    if (isRow) renderRow(slide, block, curY, blockHeight);
+                    else renderBlock(slide, block, curY, blockHeight);
                     
-                    curY += blockHeight + 0.3; // Add Margin Bottom
+                    curY += blockHeight + 0.3;
                 });
-
-                // Footer Number
-                // (Note: PptxGenJS master slides are better for this, but simplistic approach here)
-                // 현재 코드 구조상 루프 내에서 처리하기 복잡하므로, 마지막 장 번호만 남거나 함.
-                // *Zenith Fix*: 페이지네이션 된 슬라이드들은 Loop 안에서 생성되므로, 
-                // 전역적으로 슬라이드 번호를 매기는 로직이 필요하나, 여기서는 단순화.
             });
 
-            await pptx.writeFile({ fileName: 'Zenith_V7_AutoPaging.pptx' });
-            uiMsg('Zenith Build Complete.', false);
+            await pptx.writeFile({ fileName: 'Zenith_V7_Fixed.pptx' });
+            uiMsg('Success! Check Download.', false);
 
         } catch (e) {
             console.error(e);
-            uiMsg('Fatal Error: ' + e.message, true);
+            uiMsg('Error: ' + e.message, true);
         } finally {
             genBtn.disabled = false;
         }
     });
 
-    // --- ENGINE CORE ---
-
     function renderHeader(slide, text, isCover, dom) {
         slide.background = { color: 'FFFFFF' };
-        
         if (isCover) {
-            // Cover Render Logic
             slide.addText(text, { x:0.5, y:2.5, w:9, h:1.5, fontSize:44, color:CONF.primary, bold:true, align:'center', fontFace:CONF.font });
             if(dom) {
                 const sub = dom.querySelector('.subtitle, h2');
@@ -285,7 +203,6 @@
             }
             return 6.0;
         } else {
-            // Content Header
             slide.addText(text, { x:0.5, y:0.4, w:9, fontSize:24, color:CONF.text, bold:true, fontFace:CONF.font, valign:'top' });
             slide.addShape(pptx.ShapeType.line, { x:0.5, y:1.1, w:9, h:0, line:{color:CONF.primary, width:2} });
             return CONF.headerBottom;
@@ -293,11 +210,13 @@
     }
 
     function estimateBlockHeight(el, w) {
-        let h = 0.4; // Base padding
+        let h = 0.4; 
         if(el.querySelector('.box-title, h3')) h += 0.5;
         if(el.querySelector('.big-stat')) h += 1.2;
         
-        const texts = el.querySelectorAll('p, li, .box-text');
+        // ★ FIX: Use Helper Function
+        const texts = getTextTargets(el);
+        
         texts.forEach(t => {
             const txt = t.textContent.trim();
             if(!txt) return;
@@ -314,26 +233,20 @@
 
         cols.forEach((col, i) => {
             const x = CONF.margin + (i * (colW + gap));
-            
-            // Background
             if(col.classList.contains('box') || col.querySelector('.box')) {
                 slide.addShape(pptx.ShapeType.roundRect, {
                     x:x, y:y, w:colW, h:height,
                     fill:{color:CONF.bgBox}, line:{color:CONF.line, width:1}
                 });
             }
-
-            // Content (Vertical Center Logic from V6)
             const contentH = estimateBlockHeight(col, colW - 0.4);
-            const offset = Math.max(0, (height - contentH) / 2); // Center alignment
-            
+            const offset = Math.max(0, (height - contentH) / 2);
             renderInnerContent(slide, col, x + 0.2, y + offset, colW - 0.4);
         });
     }
 
     function renderBlock(slide, block, y, height) {
-        if(block.tagName === 'TABLE' || block.classList.contains('data-table')) {
-            // Table Render
+        if(block.tagName === 'TABLE') {
             const rows = [];
             block.querySelectorAll('tr').forEach((tr, rIdx) => {
                 const rowData = [];
@@ -353,49 +266,40 @@
             });
             if(rows.length > 0) slide.addTable(rows, { x:CONF.margin, y:y, w:CONF.contentW, rowH:0.4 });
         } else {
-            // Standard Text Block
             renderInnerContent(slide, block, CONF.margin, y, CONF.contentW);
         }
     }
 
     function renderInnerContent(slide, el, x, y, w) {
         let curY = y;
-
-        // Title
+        
+        // Headings
         const title = el.querySelector('.box-title, h3');
         if(title) {
-            slide.addText(title.textContent.trim(), {
-                x:x, y:curY, w:w, h:0.4, fontSize:14, color:CONF.primary, bold:true, fontFace:CONF.font
-            });
+            slide.addText(title.textContent.trim(), { x:x, y:curY, w:w, h:0.4, fontSize:14, color:CONF.primary, bold:true, fontFace:CONF.font });
             curY += 0.5;
         }
-
-        // Big Stat
         const stat = el.querySelector('.big-stat');
         if(stat) {
-            slide.addText(stat.textContent.trim(), {
-                x:x, y:curY, w:w, h:0.8, fontSize:36, color:CONF.primary, bold:true, align:'center', fontFace:'Arial'
-            });
+            slide.addText(stat.textContent.trim(), { x:x, y:curY, w:w, h:0.8, fontSize:36, color:CONF.primary, bold:true, align:'center', fontFace:'Arial' });
             curY += 0.8;
         }
 
-        // Text & Lists
-        const nodes = el.querySelectorAll('p, li, .box-text');
+        // ★ FIX: Use Helper Function to find text nodes including SELF
+        const nodes = getTextTargets(el);
+
         nodes.forEach(node => {
             if(node.closest('.big-stat') || node.classList.contains('box-title')) return;
             
             const txt = node.textContent.trim();
             const isList = node.tagName === 'LI';
-            
-            // Semantic Color Check
             let color = CONF.muted;
             if(node.classList.contains('text-red')) color = CONF.danger;
             if(node.classList.contains('text-green')) color = CONF.success;
-            if(node.classList.contains('orange-text')) { color = CONF.primary; } // 호환성
+            if(node.classList.contains('orange-text')) color = CONF.primary;
 
-            // Indentation
             let indent = 0;
-            if(node.classList.contains('indent')) indent = 1; // Simple indent logic
+            if(node.classList.contains('indent')) indent = 1;
 
             const lines = Math.ceil(txt.length / (w * 6.5));
             const h = (lines * 0.28) + 0.1;
