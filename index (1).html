@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>한화생명 - Physical OMO 전략</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+    <style>
+        :root {
+            --primary-blue: #0071EC;
+            --secondary-purple: #5050EF;
+            --dark-gray: #222222;
+            --mid-gray: #555555;
+            --light-gray: #F5F5F5;
+            --white: #FFFFFF;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Pretendard', 'Malgun Gothic', sans-serif; background: #555; }
+
+        .slide {
+            width: 1280px;
+            height: 720px;
+            background: var(--white);
+            margin: 20px auto;
+            padding: 50px 70px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            page-break-after: always;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .action-title {
+            font-size: 30px;
+            font-weight: 800;
+            color: var(--dark-gray);
+            border-bottom: 3px solid var(--primary-blue);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            line-height: 1.3;
+            letter-spacing: -1px;
+        }
+
+        .content { flex: 1; display: flex; flex-direction: column; }
+        .footer {
+            font-size: 14px;
+            color: #aaa;
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+
+        .row { display: flex; gap: 25px; flex: 1; }
+        .col { flex: 1; }
+        .box { background: var(--light-gray); padding: 22px; border-radius: 10px; height: 100%; }
+        .box-h { font-size: 20px; font-weight: 700; color: var(--primary-blue); margin-bottom: 12px; }
+        .box-text { font-size: 16px; line-height: 1.6; color: #444; }
+        .blue { color: var(--primary-blue); }
+        .purple { color: var(--secondary-purple); }
+        .bold { font-weight: 700; }
+        .small { font-size: 15px; color: #666; }
+        ul { list-style: none; }
+        li { margin-bottom: 8px; font-size: 16px; line-height: 1.5; color: #444; }
+        li::before { content: "• "; color: var(--primary-blue); font-weight: bold; }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 15px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background: var(--primary-blue); color: white; font-weight: 700; text-align: center; }
+        td { background: white; }
+        tbody tr:nth-child(even) { background: #f9f9f9; }
+        .hl { background: rgba(0, 113, 236, 0.08); font-weight: 700; color: var(--primary-blue); }
+        
+        .big-stat { font-size: 56px; font-weight: 900; color: var(--primary-blue); display: block; margin-bottom: 10px; }
+        .stat-label { font-size: 17px; color: var(--mid-gray); font-weight: 600; }
+        .arrow-right { font-size: 40px; color: #ccc; margin: 0 20px; }
+
+        .data-table { font-size: 14px; }
+        .data-table th { font-size: 15px; padding: 12px; }
+        .data-table td { padding: 10px 12px; }
+    </style>
+</head>
+<body>
+
+<!-- 01. 표지 -->
+<div class="slide" style="justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle at top right, #fff, #EBF4FF);">
+    <h3 style="font-size: 22px; color: var(--mid-gray); margin-bottom: 10px;">한화생명 Future Talent Contest 기획안</h3>
+    <h1 style="font-size: 64px; font-weight: 900; letter-spacing: -3px; line-height: 1.2;">
+        Project <span class="blue">Physical OMO</span>
+    </h1>
+    <div style="width: 100px; height: 5px; background: var(--primary-blue); margin: 30px auto;"></div>
+    <h2 style="font-size: 26px; font-weight: 600; color: var(--mid-gray); line-height: 1.4;">
+        From "Probability" to "Asset"<br>
+        <span style="font-weight: 700; color: var(--dark-gray);">보험업의 데이터 주권 선언</span>
+    </h2>
+    <p style="margin-top: 30px; font-size: 18px; color: #666;">계리의 종말(The End of Reactive Actuarial)을 향하여</p>
+    <div style="position: absolute; bottom: 50px; right: 70px; text-align: right;">
+        <p class="small">2026</p>
+    </div>
+</div>
+
+<!-- 02. Executive Summary -->
+<div class="slide">
+    <div class="action-title">우리는 보험금을 지급하는 회사가 아니라,<br>위험을 관리하는 회사가 되어야 합니다.</div>
+    <div class="content">
+        <div class="box" style="background: rgba(0, 113, 236, 0.05); border-left: 4px solid var(--primary-blue); padding: 25px;">
+            <p style="font-size: 18px; line-height: 1.7; color: #333;">
+                본 기획안은 <b class="blue">계리의 종말(The End of Reactive Actuarial)</b>이라는 비전 아래, 한화생명이 <b>'지급자(Payer)'</b>에서 <b>'관리자(Manager)'</b>로 진화하는 마스터플랜을 제시합니다.
+            </p>
+        </div>
+        <div class="row" style="margin-top: 20px;">
+            <div class="box">
+                <div class="box-h">테슬라의 전략을 배우다</div>
+                <p class="box-text">
+                    테슬라가 "고급 스포츠카 → 대중 전기차"로 확장했듯, 우리는 <b class="blue">"고관여 슈퍼헬시 → 전국민 헬스케어 플랫폼"</b>으로 나아갑니다.
+                </p>
+            </div>
+            <div class="box">
+                <div class="box-h">Physical OMO 전략</div>
+                <p class="box-text">
+                    빅테크가 못 가는 곳: <b>동네 헬스장, 필라테스 스튜디오, 재활센터</b><br>
+                    우리의 강점: 전국 수천 개 GA 네트워크, 오프라인 영업력
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="footer"><span>Executive Summary</span><span>02</span></div>
+</div>
+
+<!-- 03. Part 1 - 보험업의 본질적 모순 -->
+<div class="slide">
+    <div class="action-title">Part 1. THE VISION<br>보험업의 본질적 모순</div>
+    <div class="content">
+        <div class="box" style="border-left: 4px solid var(--primary-blue); background: white; border: 2px solid #eee;">
+            <p style="font-size: 18px; color: #333; margin-bottom: 15px;">
+                보험회사는 역설적으로 고객이 <b>'아플 때'</b>만 가치를 창출합니다.
+            </p>
+            <p style="font-size: 16px; color: #666; line-height: 1.6;">
+                사고 발생 → 보험금 지급 → 손해율 상승 → 보험료 인상<br>
+                우량체 고객조차 "언젠가 아플 것"이라는 확률에 기댄 가격 책정<br>
+                계리의 본질: 과거 데이터 기반 <b>사후적(Reactive)</b> 위험 평가
+            </p>
+        </div>
+        <div style="text-align: center; margin-top: 30px; background: rgba(0, 113, 236, 0.08); padding: 25px; border-radius: 10px;">
+            <h3 class="blue" style="font-size: 24px; margin-bottom: 15px;">이것은 지속 가능한가?</h3>
+            <p style="font-size: 16px; color: #555;">우리는 '지급의 늪'에서 벗어나지 못하고 있습니다.</p>
+        </div>
+    </div>
+    <div class="footer"><span>Part 1. THE VISION</span><span>03</span></div>
+</div>
+
+<!-- 04. 보험업의 위기 지표 -->
+<div class="slide">
+    <div class="action-title">현재 보험업의 구조적 한계</div>
+    <div class="content">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="25%">지표</th>
+                    <th width="25%">현황</th>
+                    <th width="50%">시사점</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="bold">의료비 상승률</td>
+                    <td class="blue bold">연 5-7%</td>
+                    <td>소비자물가 상승률의 2-3배</td>
+                </tr>
+                <tr>
+                    <td class="bold">초고령사회 진입</td>
+                    <td class="blue bold">2025년</td>
+                    <td>65세 이상 인구 20% 돌파</td>
+                </tr>
+                <tr>
+                    <td class="bold">실손보험 손해율</td>
+                    <td class="blue bold">130% 초과</td>
+                    <td>2024년 기준, 구조적 적자</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="footer"><span>현황 분석</span><span>04</span></div>
+</div>
+
+<!-- 05. 계리의 진화 -->
+<div class="slide">
+    <div class="action-title">The End of Reactive Actuarial: 우리의 비전</div>
+    <div class="content">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="50%">과거의 계리</th>
+                    <th width="50%" class="hl">미래의 계리</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>사후적 확률 계산</td>
+                    <td class="hl">사전적 리스크 관리</td>
+                </tr>
+                <tr>
+                    <td>데이터 부족</td>
+                    <td class="hl">실시간 데이터 댐</td>
+                </tr>
+                <tr>
+                    <td>보험금 지급</td>
+                    <td class="hl">위험 예방 & 개입</td>
+                </tr>
+                <tr>
+                    <td>손해율 관리</td>
+                    <td class="hl">건강수명 연장</td>
+                </tr>
+                <tr>
+                    <td>"지급하는 보험사"</td>
+                    <td class="hl">"관리하는 보험사"</td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="text-align: center; margin-top: 25px; background: #f9f9f9; padding: 18px; border-radius: 8px;">
+            <p class="bold" style="font-size: 17px; color: #333;">데이터 ↑ → 정확도 ↑ → 손해율 ↓ → 보험료 ↓ → 가입자 ↑</p>
+        </div>
+    </div>
+    <div class="footer"><span>계리의 진화: Reactive → Proactive</span><span>05</span></div>
+</div>
+
+<!-- 06. 왜 헬스케어인가 -->
+<div class="slide">
+    <div class="action-title">보험업에서 헬스케어 데이터의 가치</div>
+    <div class="content">
+        <div class="row">
+            <div class="box">
+                <div class="box-h">1. 예측력 향상</div>
+                <p class="box-text">
+                    <b>기존:</b> 나이, 성별, 병력 → 정적(Static) 데이터<br>
+                    <b class="blue">신규:</b> 운동빈도, 체성분, 수면패턴 → 동적(Dynamic) 데이터<br><br>
+                    예측 정확도 <b class="blue">30-50% 향상</b> 가능 (보험개발원 연구)
+                </p>
+            </div>
+            <div class="box">
+                <div class="box-h">2. 손해율 직접 개선</div>
+                <p class="box-text">
+                    운동 주 3회 이상 집단: <b class="blue">입원율 40% 낮음</b> (국민건강보험공단)<br><br>
+                    근골격계 질환 예방: 연간 의료비 1인당 평균 <b class="blue">120만원 절감</b>
+                </p>
+            </div>
+            <div class="box">
+                <div class="box-h">3. 고객 Lock-in 효과</div>
+                <p class="box-text">
+                    데이터 축적 기간 = 전환비용(Switching Cost)<br><br>
+                    3년 이상 데이터 보유 시 해지율 <b class="blue">60% 감소</b> (KIRI)
+                </p>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 20px; background: rgba(0, 113, 236, 0.08); padding: 15px; border-radius: 8px;">
+            <p class="bold blue" style="font-size: 18px;">데이터가 곧 마진입니다</p>
+        </div>
+    </div>
+    <div class="footer"><span>Why Healthcare?</span><span>06</span></div>
+</div>
+
+<!-- 07. Part 2 - 앱의 몰락 -->
+<div class="slide">
+    <div class="action-title">Part 2. THE REALITY<br>앱(App)의 몰락: 수동 입력의 한계</div>
+    <div class="content">
+        <div style="text-align: center; margin-bottom: 25px;">
+            <p style="font-size: 20px; color: #555; line-height: 1.6;">
+                국내 보험사 헬스케어 앱 현황 (2024년 기준)
+            </p>
+        </div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="30%">지표</th>
+                    <th width="20%">수치</th>
+                    <th width="50%">의미</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="bold">평균 MAU</td>
+                    <td class="blue bold">19%</td>
+                    <td>10명 중 8명은 앱을 안 켬</td>
+                </tr>
+                <tr>
+                    <td class="bold">3개월 이탈률</td>
+                    <td class="blue bold">82%</td>
+                    <td>사실상 사망 선고</td>
+                </tr>
+                <tr>
+                    <td class="bold">일일 활성 사용자</td>
+                    <td class="blue bold">3-5%</td>
+                    <td>유령 앱</td>
+                </tr>
+                <tr>
+                    <td class="bold">평균 사용 시간</td>
+                    <td class="blue bold">47초</td>
+                    <td>포인트만 받고 종료</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="footer"><span>데이터로 본 참혹한 현실</span><span>07</span></div>
+</div>
+
+<!-- 08. 왜 실패했나 -->
+<div class="slide">
+    <div class="action-title">왜 이렇게 되었나?</div>
+    <div class="content">
+        <div class="row">
+            <div class="box">
+                <div class="box-h">1. 근본적 설계 오류</div>
+                <p class="box-text">
+                    고객에게 숙제를 줌<br><br>
+                    "운동 기록을 입력하세요"<br>
+                    "식단을 사진 찍어 올리세요"<br>
+                    "수면 시간을 기록하세요"
+                </p>
+            </div>
+            <div class="box">
+                <div class="box-h">2. 본질적 욕구 왜곡</div>
+                <p class="box-text">
+                    고객은 건강해지고 싶지, 기록하고 싶지 않음<br><br>
+                    입력 = 허들(Hurdle) = 이탈의 시작<br><br>
+                    하이데거: "도구는 손에 익으면 투명해진다"<br>
+                    → 앱은 투명해지지 못함
+                </p>
+            </div>
+            <div class="box">
+                <div class="box-h">3. 보상의 허구</div>
+                <p class="box-text">
+                    포인트 50원 vs 입력 시간 3분<br>
+                    = 시급 1,000원<br><br>
+                    합리적 소비자는 앱을 버림
+                </p>
+            </div>
+        </div>
+        <div style="text-align: center; margin-top: 20px; background: rgba(0, 113, 236, 0.08); padding: 15px; border-radius: 8px;">
+            <p class="bold blue" style="font-size: 18px;">결론: 수동 입력 방식은 구조적으로 불가능합니다</p>
+        </div>
+    </div>
+    <div class="footer"><span>근본 원인 분석</span><span>08</span></div>
+</div>
+
+<!-- 09. 빅테크 의존의 함정 -->
+<div class="slide">
+    <div class="action-title">빅테크 의존의 함정: Walled Garden</div>
+    <div class="content">
+        <div class="box" style="background: rgba(0, 113, 236, 0.05); border: 2px solid var(--primary-blue);">
+            <div class="box-h">삼성전자의 젤스(Xealth) 인수 (2025.01.07)</div>
+            <p class="box-text">
+                삼성은 미국 디지털 헬스케어 플랫폼 '젤스'를 인수하며:<br>
+                • 500개 병원 네트워크 확보<br>
+                • 삼성헬스 ↔ 병원 시스템 직접 연동<br>
+                • 본격적인 데이터 폐쇄 생태계 구축
+            </p>
+        </div>
+        <table class="data-table" style="margin-top: 20px;">
+            <thead>
+                <tr>
+                    <th width="25%">문제</th>
+                    <th width="75%">내용</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="bold">데이터 주권 상실</td>
+                    <td>삼성/애플이 데이터 소유권 보유, 보험사는 "API 사용료 내는 고객"으로 전락</td>
+                </tr>
+                <tr>
+                    <td class="bold">백그라운드 연동의 환상</td>
+                    <td>iOS: 백그라운드 데이터 접근 제한 (Privacy 정책)<br>삼성: 젤스 인수 후 외부 제공 축소 예상</td>
+                </tr>
+                <tr>
+                    <td class="bold">협상력 Zero</td>
+                    <td>한화생명 vs 삼성전자의 협상력은? 빅테크는 보험사를 필요로 하지 않음</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="footer"><span>삼성헬스·애플헬스와의 협업이 답인가?</span><span>09</span></div>
+</div>
+
+<!-- 10. 한화생명의 비교우위 -->
+<div class="slide">
+    <div class="action-title">Critical Insight: 한화생명의 비교우위는 무엇인가?</div>
+    <div class="content">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="50%">절대 이길 수 없는 것</th>
+                    <th width="50%" class="hl">절대 질 수 없는 것</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>삼성 vs 기술력 ✗</td>
+                    <td class="hl">오프라인 네트워크 (제판분리로 확보한 압도적 GA) ✓</td>
+                </tr>
+                <tr>
+                    <td>애플 vs UX/디자인 ✗</td>
+                    <td class="hl">금융 생태계 (보험·카드·증권·자산운용) ✓</td>
+                </tr>
+                <tr>
+                    <td>구글 vs AI 알고리즘 ✗</td>
+                    <td class="hl">신뢰 자산 (70년 역사, 국민 브랜드) ✓</td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="margin-top: 25px; background: rgba(0, 113, 236, 0.05); padding: 20px; border-radius: 10px; border-left: 4px solid var(--primary-blue);">
+            <p style="font-size: 17px; line-height: 1.7; color: #333;">
+                <b>전략적 선택:</b> "남들이 잘하는 것을 따라하지 말고, 우리가 가장 잘하는 것부터 시작하라"<br><br>
+                <span class="blue bold">Physical(오프라인) + Digital(OCR/AI) = Physical OMO</span><br><br>
+                빅테크가 못 가는 곳: 동네 헬스장, 필라테스 스튜디오, 재활센터<br>
+                우리의 강점: 전국 수천 개 GA 네트워크, 오프라인 영업력
+            </p>
+        </div>
+    </div>
+    <div class="footer"><span>우리는 기술로 싸우지 않습니다. 관계와 신뢰로 싸웁니다</span><span>10</span></div>
+</div>
+
+<!-- 11. Part 3 - Physical OMO -->
+<div class="slide">
+    <div class="action-title">Part 3. THE ANSWER<br>Physical OMO Master Plan</div>
+    <div class="content">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <p style="font-size: 22px; color: #555; line-height: 1.6;">
+                우리의 마스터플랜: <b class="blue">계리의 종말</b>을 향하여
+            </p>
+        </div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="20%">Phase</th>
+                    <th width="40%">테슬라</th>
+                    <th width="40%" class="hl">Physical OMO</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="bold">Phase 1</td>
+                    <td>고급 스포츠카 (Roadster) 소량 생산<br>→ 기술 검증 + 브랜드 구축</td>
+                    <td class="hl">고관여 슈퍼헬시<br>→ 데이터 댐 구축</td>
+                </tr>
+                <tr>
+                    <td class="bold">Phase 2</td>
+                    <td>프리미엄 세단 (Model S/X)<br>→ 시장 확대 + 대량생산</td>
+                    <td class="hl">중관여층 확장<br>→ 일반 피트니스</td>
+                </tr>
+                <tr>
+                    <td class="bold">Phase 3</td>
+                    <td>대중 전기차 (Model 3/Y)<br>→ 시장 지배 + 글로벌 확장</td>
+                    <td class="hl">저관여층 포함<br>→ 전국민 플랫폼</td>
+                </tr>
+                <tr>
+                    <td class="bold">Phase 4</td>
+                    <td>에너지 생태계 (Solar + Battery)<br>→ 자동차 회사 → 에너지 회사</td>
+                    <td class="hl">보험사 → 헬스케어 주권자</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="footer"><span>Master Plan 철학: 테슬라에게 배우다</span><span>11</span></div>
+</div>
+
+<!-- 12. Phase 1 타겟 -->
+<div class="slide">
+    <div class="action-title">Phase 1 (2026-2027): The Super Healthy</div>
+    <div class="content">
+        <div class="box" style="background: rgba(0, 113, 236, 0.05); border: 2px solid var(--primary-blue);">
+            <div class="box-h">Target: 고관여 슈퍼헬시족 (상위 20%, 약 200만 명)</div>
+            <p class="box-text">
+                <b>페르소나:</b><br>
+                • 30대 중후반, 연소득 7천만원 이상<br>
+                • 주 3-5회 운동 (크로스핏, 필라테스, 러닝)<br>
+                • 건강에 월 30-50만원 지출<br>
+                • 애플워치·가민·인바디 등 디바이스 보유
+            </p>
+        </div>
+        <div class="row" style="margin-top: 20px;">
+            <div class="box">
+                <div class="box-h">데이터 품질 (Quality)</div>
+                <p class="box-text">
+                    자발적 데이터 생산자<br>
+                    정확하고 지속적인 데이터 (이탈률 낮음)<br>
+                    쓰레기 데이터 IN = 쓰레기 예측 OUT
+                </p>
+            </div>
+            <div class="box">
+                <div class="box-h">비즈니스 마진 (Margin)</div>
+                <p class="box-text">
+                    상해 발생률: 일반인 대비 3배 높음<br>
+                    BUT 중증 질환률: 60% 낮음<br>
+                    고가 보험료 + 저 손해율 = 초고마진
+                </p>
+            </div>
+            <div class="box">
+                <div class="box-h">입소문 효과 (Viral)</div>
+                <p class="box-text">
+                    SNS 활동 활발 (#오운완 문화)<br>
+                    커뮤니티 중심 소비<br>
+                    1명 가입 = 5명 추가 유입
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="footer"><span>왜 여기서 시작하나?</span><span>12</span></div>
+</div>
+
+<!-- 13. 슈퍼헬시 상품 경제성 -->
+<div class="slide">
+    <div class="action-title">비즈니스 모델: Physical OMO 경제성</div>
+    <div class="content">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="33%">지표</th>
+                    <th width="33%">일반 보험</th>
+                    <th width="33%" class="hl">슈퍼헬시 상품</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="bold">월 보험료</td>
+                    <td>8만원</td>
+                    <td class="hl">3만원 (상해특화)</td>
+                </tr>
+                <tr>
+                    <td class="bold">예상 손해율</td>
+                    <td>85%</td>
+                    <td class="hl">45%</td>
+                </tr>
+                <tr>
+                    <td class="bold">순이익률</td>
+                    <td>5%</td>
+                    <td class="hl">35%</td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="box" style="margin-top: 25px; background: white; border: 2px solid #eee;">
+            <div class="box-h">상품 구조</div>
+            <p class="box-text">
+                <b>단기 상품: 미니 상해보험 (Funnel 입구)</b><br>
+                • 보장: 십자인대 파열, 관절 수술, 골절 진단비<br>
+                • 보험료: 월 2-3천원 (진입장벽 제거)<br>
+                • 목적: 데이터 수집 시작 + 고객 DB 확보<br><br>
+                <b>장기 상품: 건강수명 연금 (진짜 목표)</b><br>
+                • 컨셉: "지금 흘린 땀이 30년 뒤 연금이 됩니다"<br>
+                • 구조: 건강관리 잘할수록 연금 수령액 증가<br>
+                • 차별화: 개인별 누적 데이터 기반 맞춤 설계
+            </p>
+        </div>
+    </div>
+    <div class="footer"><span>비즈니스 모델</span><span>13</span></div>
+</div>
+
+<!-- 14. Physical OMO 작동 원리 -->
+<div class="slide">
+    <div class="action-title">Physical OMO 3대 축: Physical + OCR + LIFEPLUS</div>
+    <div class="content">
+        <div class="row">
+            <div class="box">
+                <div class="box-h">1) Physical 거점</div>
+                <p class="box-text">
+                    <b>타겟:</b> 크로스핏 박스 300개, 프리미엄 필라테스 200개<br><br>
+                    <b>제공:</b> 무인 InBody 키오스크 무상 설치<br><br>
+                    <b>헬스장 Win:</b> 최신 장비 무료 제공, 회원 혜택 강화<br>
+                    <b>한화 Win:</b> 데이터 수집 + 보험 가입 퍼널
+                </p>
+            </div>
+            <div class="box">
+                <div class="box-h">2) OCR 기술</div>
+                <p class="box-text">
+                    <b>문제:</b> 나이키·애플워치·가민이 API를 안 주면?<br><br>
+                    <b>해결:</b> 고객이 스크린샷 찍어서 업로드 → OCR 자동 인식<br><br>
+                    #오운완 문화: 이미 인증샷 찍는 문화 존재<br>
+                    Google Cloud Vision AI 정확도 95% 이상
+                </p>
+            </div>
+            <div class="box">
+                <div class="box-h">3) LIFEPLUS 생태계</div>
+                <p class="box-text">
+                    <b>법적 한계:</b> 현금성 리워드 3만원 규제<br><br>
+                    <b>우회 전략:</b> 포인트 + 제휴몰<br><br>
+                    <b>사용처:</b><br>
+                    • 제휴몰: 영양제, 운동용품 (20% 할인)<br>
+                    • 보험료 납입: 월 보험료 최대 10% 차감<br>
+                    • 트라이브 앱: 주식 소수점 투자
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="footer"><span>실행 전략</span><span>14</span></div>
+</div>
+
+<!-- 15. Zero-Friction 프로세스 -->
+<div class="slide">
+    <div class="action-title">Zero-Friction 데이터 수집 프로세스</div>
+    <div class="content">
+        <div style="display: flex; align-items: center; justify-content: space-around; margin-top: 40px;">
+            <div style="text-align: center; flex: 1;">
+                <div style="width: 120px; height: 120px; background: rgba(0, 113, 236, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; border: 3px solid var(--primary-blue);">
+                    <span style="font-size: 48px;">①</span>
+                </div>
+                <p class="bold" style="font-size: 17px;">헬스장 입장</p>
+                <p class="small">(QR 체크인)</p>
+            </div>
+            <div style="font-size: 40px; color: var(--primary-blue);">→</div>
+            <div style="text-align: center; flex: 1;">
+                <div style="width: 120px; height: 120px; background: rgba(0, 113, 236, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; border: 3px solid var(--primary-blue);">
+                    <span style="font-size: 48px;">②</span>
+                </div>
+                <p class="bold" style="font-size: 17px;">운동 수행</p>
+                <p class="small">(일상적 루틴)</p>
+            </div>
+            <div style="font-size: 40px; color: var(--primary-blue);">→</div>
+            <div style="text-align: center; flex: 1;">
+                <div style="width: 120px; height: 120px; background: rgba(0, 113, 236, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; border: 3px solid var(--primary-blue);">
+                    <span style="font-size: 48px;">③</span>
+                </div>
+                <p class="bold" style="font-size: 17px;">InBody 측정</p>
+                <p class="small">(OR 웨어러블 스크린샷)</p>
+            </div>
+            <div style="font-size: 40px; color: var(--primary-blue);">→</div>
+            <div style="text-align: center; flex: 1;">
+                <div style="width: 120px; height: 120px; background: rgba(0, 113, 236, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; border: 3px solid var(--primary-blue);">
+                    <span style="font-size: 48px;">④</span>
+                </div>
+                <p class="bold" style="font-size: 17px;">자동 포인트 적립</p>
+                <p class="small">(LIFEPLUS)</p>
+            </div>
+        </div>
+        <div style="margin-top: 35px; background: rgba(0, 113, 236, 0.05); padding: 20px; border-radius: 10px; border-left: 4px solid var(--primary-blue);">
+            <p class="bold" style="font-size: 17px; margin-bottom: 10px;">판매 채널: Untact Trigger</p>
+            <p class="box-text">
+                InBody 측정 후 결과지 출력 → "예상 보험료 할인 XX%" 문구 노출 → 관심 있는 고객만 QR 스캔 → 전문 FP 자동 매칭 (비대면 상담)
+            </p>
+        </div>
+    </div>
+    <div class="footer"><span>고객 경험</span><span>15</span></div>
+</div>
+
+<!-- 16. Phase 1 목표 -->
+<div class="slide">
+    <div class="action-title">Phase 1 목표 (2026-2027)</div>
+    <div class="content">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="40%">KPI</th>
+                    <th width="60%">목표</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="bold">제휴 헬스장</td>
+                    <td class="blue bold">500개 (전국)</td>
+                </tr>
+                <tr>
+                    <td class="bold">가입자 수</td>
+                    <td class="blue bold">50,000명</td>
+                </tr>
+                <tr>
+                    <td class="bold">데이터 댐</td>
+                    <td class="blue bold">일일 10만 건 데이터 수집</td>
+                </tr>
+                <tr>
+                    <td class="bold">손해율</td>
+                    <td class="blue bold">45% (목표)</td>
+                </tr>
+                <tr>
+                    <td class="bold">순이익</td>
+                    <td class="blue bold">연 150억 (예상)</td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="margin-top: 25px; text-align: center; background: #f9f9f9; padding: 20px; border-radius: 10px;">
+            <p class="bold blue" style="font-size: 18px;">핵심 성공지표: 데이터 댐 구축 완료</p>
+        </div>
+    </div>
+    <div class="footer"><span>Phase 1 KPI</span><span>16</span></div>
+</div>
+
+<!-- 17. Part 4 - Risk Management -->
+<div class="slide">
+    <div class="action-title">Part 4. EXECUTION<br>Risk Management Matrix</div>
+    <div class="content">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="15%">리스크</th>
+                    <th width="25%">위협</th>
+                    <th width="40%">방어 논리</th>
+                    <th width="20%">효과</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="bold">Cost Risk</td>
+                    <td>OCR API 비용 폭증</td>
+                    <td>• Metadata 1차 필터링<br>• API 호출 70% 감소<br>• Opex 구조 (탄력적)</td>
+                    <td class="hl">비용 관리 가능</td>
+                </tr>
+                <tr>
+                    <td class="bold">Fraud Risk</td>
+                    <td>가짜 데이터 (사진 조작)</td>
+                    <td>• FDS 이상징후 탐지<br>• 이미지 해시값 대조<br>• EXIF 메타데이터 검증</td>
+                    <td class="hl">신뢰도 95% 확보</td>
+                </tr>
+                <tr>
+                    <td class="bold">Legal Risk</td>
+                    <td>리워드 규제 (3만원 한도)</td>
+                    <td>• LIFEPLUS 포인트 (현금 X)<br>• 제휴몰 현물 제공<br>• 법률 자문 완료</td>
+                    <td class="hl">규제 준수</td>
+                </tr>
+                <tr>
+                    <td class="bold">Privacy Risk</td>
+                    <td>개인정보 유출 우려</td>
+                    <td>• 익명화 처리<br>• 블록체인 저장 (선택)<br>• 동의 철회 즉시 삭제</td>
+                    <td class="hl">신뢰 확보</td>
+                </tr>
+                <tr>
+                    <td class="bold">Ops Risk</td>
+                    <td>헬스장 현장 마찰</td>
+                    <td>• 무인 키오스크<br>• QR 신청제 (상주인력 X)<br>• Win-Win 수익 배분</td>
+                    <td class="hl">현장 수용성 ↑</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="footer"><span>모든 제안은 리스크 없이는 가치가 없습니다</span><span>17</span></div>
+</div>
+
+<!-- 18. 한화만의 경쟁우위 -->
+<div class="slide">
+    <div class="action-title">Why Hanwha? Why Now?</div>
+    <div class="content">
+        <div class="row">
+            <div class="box">
+                <div class="box-h">1) 제판분리 이후 압도적 오프라인 네트워크</div>
+                <p class="box-text">
+                    전국 수천 개 GA (General Agent)<br>
+                    지역 밀착형 영업 조직<br>
+                    빅테크가 절대 따라올 수 없는 자산
+                </p>
+            </div>
+            <div class="box">
+                <div class="box-h">2) 금융 생태계 (LIFEPLUS 가능 이유)</div>
+                <p class="box-text">
+                    한화생명: 보험<br>
+                    한화투자증권: 트라이브 앱 (주식)<br>
+                    한화카드: 제휴몰 결제<br>
+                    포인트가 한화 그룹 내에서 순환
+                </p>
+            </div>
+        </div>
+        <div class="row" style="margin-top: 20px;">
+            <div class="box">
+                <div class="box-h">3) 브랜드 신뢰</div>
+                <p class="box-text">
+                    70년 역사<br>
+                    국민연금 다음 가는 노후 파트너 인식<br>
+                    헬스케어 진출 시 거부감 최소화
+                </p>
+            </div>
+            <div class="box">
+                <div class="box-h">4) HLE·한화이글스 등 문화 자산</div>
+                <p class="box-text">
+                    e스포츠 팬층 (20대)<br>
+                    야구 팬층 (30-40대)<br>
+                    마라톤 스폰서 (건강 이미지)
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="footer"><span>한화만의 경쟁우위</span><span>18</span></div>
+</div>
+
+<!-- 19. Part 5 - Financial Impact -->
+<div class="slide">
+    <div class="action-title">Part 5. IMPACT<br>Financial Impact</div>
+    <div class="content">
+        <div class="row">
+            <div class="box">
+                <div class="box-h">보험 이익</div>
+                <p class="box-text">
+                    • 손해율 개선: 85% → 45% (Phase 1)<br>
+                    • 신계약 확대: 연 50,000건 (Phase 1)<br>
+                    • 해지율 감소: 60% ↓ (데이터 Lock-in)
+                </p>
+            </div>
+            <div class="box">
+                <div class="box-h">비보험 이익</div>
+                <p class="box-text">
+                    • 제휴몰 수수료: 연 30억 (예상)<br>
+                    • 데이터 라이선스: 제약사·병원 판매<br>
+                    • 광고 수익: 타겟 마케팅 플랫폼
+                </p>
+            </div>
+        </div>
+        <table class="data-table" style="margin-top: 25px;">
+            <thead>
+                <tr>
+                    <th width="33%">Phase</th>
+                    <th width="33%">연도</th>
+                    <th width="33%" class="hl">예상 순이익</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="bold">Phase 1</td>
+                    <td>2027년</td>
+                    <td class="hl">연 150억</td>
+                </tr>
+                <tr>
+                    <td class="bold">Phase 2</td>
+                    <td>2029년</td>
+                    <td class="hl">연 800억</td>
+                </tr>
+                <tr>
+                    <td class="bold">Phase 3</td>
+                    <td>2031년</td>
+                    <td class="hl">연 3,000억</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="footer"><span>총 예상 이익 (Phase 1-3)</span><span>19</span></div>
+</div>
+
+<!-- 20. ESG & CSV -->
+<div class="slide">
+    <div class="action-title">ESG & CSV (Creating Shared Value)</div>
+    <div class="content">
+        <div class="row">
+            <div class="box">
+                <div class="box-h">E (Environmental)</div>
+                <p class="box-text">
+                    디지털화로 종이 사용 ↓<br>
+                    원격 진료 활성화 → 이동 탄소 배출 ↓
+                </p>
+            </div>
+            <div class="box">
+                <div class="box-h">S (Social)</div>
+                <p class="box-text">
+                    국민 건강수명 증진<br>
+                    건보 재정 부담 경감 (연 5조원 절감 가능, 추정)<br>
+                    건강 형평성: 저소득층도 혜택 접근
+                </p>
+            </div>
+            <div class="box">
+                <div class="box-h">G (Governance)</div>
+                <p class="box-text">
+                    투명한 데이터 관리<br>
+                    고객 동의 기반 수집<br>
+                    개인정보보호 최우선
+                </p>
+            </div>
+        </div>
+        <div style="margin-top: 25px; background: rgba(0, 113, 236, 0.05); padding: 25px; border-radius: 10px; border-left: 4px solid var(--primary-blue); text-align: center;">
+            <p class="bold" style="font-size: 20px; color: #333; margin-bottom: 10px;">"한화의 고객이 건강해지면, 대한민국이 건강해집니다."</p>
+            <p style="font-size: 16px; color: #666;">보험사 이익 ↑ + 고객 보험료 ↓ + 국가 의료비 ↓ = <b class="blue">3자 모두 Win</b></p>
+        </div>
+    </div>
+    <div class="footer"><span>ESG & CSV</span><span>20</span></div>
+</div>
+
+<!-- 21. Closing -->
+<div class="slide">
+    <div class="action-title">Part 6. CLOSING<br>왜 Physical OMO인가</div>
+    <div class="content">
+        <div style="text-align: center; margin-bottom: 30px;">
+            <p style="font-size: 20px; color: #555; line-height: 1.7;">
+                <b>"보험의 본질은 무엇입니까?"</b>
+            </p>
+        </div>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="50%">과거의 답</th>
+                    <th width="50%" class="hl">우리의 답</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>"불확실성에 대비하는 금융상품"</td>
+                    <td class="hl">"삶(Life)을 더하는(Plus) 것"</td>
+                </tr>
+            </tbody>
+        </table>
+        <div style="margin-top: 30px; background: rgba(0, 113, 236, 0.05); padding: 25px; border-radius: 10px; border-left: 4px solid var(--primary-blue);">
+            <p style="font-size: 17px; line-height: 1.7; color: #333;">
+                고객에게 귀찮은 숙제(앱 입력)를 주는 것이 아니라<br>
+                고객이 흘린 땀방울을 가치 있는 자산으로 바꿔주는 것<br><br>
+                그것이 한화생명이 나아가야 할 <b class="blue">"데이터 철학"</b>입니다
+            </p>
+        </div>
+        <div style="margin-top: 25px; text-align: center; background: #f9f9f9; padding: 20px; border-radius: 10px;">
+            <p class="bold blue" style="font-size: 18px;">우리는 기술로 싸우지 않습니다. 관계와 신뢰로 싸웁니다.</p>
+        </div>
+    </div>
+    <div class="footer"><span>본질로의 회귀</span><span>21</span></div>
+</div>
+
+<!-- 22. 결론 -->
+<div class="slide" style="background: linear-gradient(135deg, #0071EC 0%, #5050EF 100%); color: white; justify-content: center; align-items: center; text-align: center;">
+    <h1 style="font-size: 54px; font-weight: 900; margin-bottom: 30px; letter-spacing: -2px;">계리의 종말<br>우리의 선언</h1>
+    <p style="font-size: 22px; opacity: 0.95; line-height: 1.6; margin-bottom: 40px;">
+        우리는 보험금을 지급하는 회사가 아닙니다.<br>
+        우리는 고객의 미래를 관리하는 회사입니다.
+    </p>
+    <div style="background: rgba(255, 255, 255, 0.15); padding: 25px 50px; border-radius: 10px; backdrop-filter: blur(10px);">
+        <p style="font-size: 18px; font-weight: 600; margin-bottom: 10px;">From Insurance Company</p>
+        <p style="font-size: 32px; font-weight: 900; letter-spacing: 1px;">↓</p>
+        <p style="font-size: 18px; font-weight: 600; margin-top: 10px;">To Health Sovereignty Company</p>
+    </div>
+</div>
+
+<!-- 23. 감사 -->
+<div class="slide" style="justify-content: center; align-items: center; text-align: center; background: radial-gradient(circle at bottom left, #fff, #EBF4FF);">
+    <h1 style="font-size: 64px; font-weight: 900; letter-spacing: -2px; margin-bottom: 30px;">
+        Thank You
+    </h1>
+    <div style="width: 100px; height: 5px; background: var(--primary-blue); margin: 0 auto 30px;"></div>
+    <p style="font-size: 24px; color: var(--mid-gray); line-height: 1.6;">
+        복잡한 현상을 뚫고 본질을 향해 가는 길,<br>
+        <b class="blue">Physical OMO</b>가 그 시작이 될 것입니다.
+    </p>
+</div>
+
+</body>
+</html>
