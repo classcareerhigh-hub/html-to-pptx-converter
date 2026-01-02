@@ -5,9 +5,8 @@
 ## 🚀 빠른 시작
 
 ### 온라인에서 바로 사용
-👉 **[여기를 클릭하세요](https://your-username.github.io/html-to-pptx-converter/)**
+👉 **[여기를 클릭하세요](https://classcareerhigh-hub.github.io/html-to-pptx-converter/)**
 
-(GitHub Pages 배포 후 위 링크를 실제 URL로 변경하세요)
 
 ## 📦 파일 구성
 
@@ -49,7 +48,7 @@ git init
 git add .
 git commit -m "Initial commit"
 git branch -M main
-git remote add origin https://github.com/your-username/html-to-pptx-converter.git
+git remote add origin https://github.com/classcareerhigh-hub/html-to-pptx-converter.git
 git push -u origin main
 ```
 
@@ -62,7 +61,7 @@ git push -u origin main
 
 ### STEP 4: 배포 완료!
 - 5분 정도 기다리면 자동 배포됩니다
-- 접속 URL: `https://your-username.github.io/html-to-pptx-converter/`
+- 접속 URL: `https://classcareerhigh-hub.github.io/html-to-pptx-converter/`
 
 ## 📱 노션 임베드 방법
 
@@ -74,7 +73,7 @@ git push -u origin main
 
 예시:
 ```
-/embed https://your-username.github.io/html-to-pptx-converter/
+/embed https://classcareerhigh-hub.github.io/html-to-pptx-converter/
 ```
 
 ## ✨ 지원 기능
