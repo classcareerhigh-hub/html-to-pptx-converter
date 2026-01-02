@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Neo CareerHigh's Slave V.1 (Fixed)</title>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.min.js"></script>
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+  <style>
+    /* IDE-like UI Design */
+    :root { 
+        --brand: #6366F1; /* Indigo */
+        --dark: #0F172A; 
+        --panel: #1E293B; 
+        --text: #F8FAFC; 
+    }
+    
+    * { box-sizing: border-box; }
+    body { font-family: 'Pretendard', sans-serif; background: var(--dark); color: var(--text); height: 100vh; display: flex; margin: 0; overflow: hidden; }
+    
+    .layout { display: grid; grid-template-columns: 320px 1fr; width: 100%; height: 100%; }
+    
+    .sidebar { background: var(--panel); border-right: 1px solid #334155; padding: 24px; display: flex; flex-direction: column; gap: 20px; box-shadow: 4px 0 24px rgba(0,0,0,0.4); z-index: 10; }
+    
+    .brand { font-size: 18px; font-weight: 800; letter-spacing: -0.5px; color: #fff; line-height: 1.3; }
+    .brand span { color: var(--brand); }
+    
+    .guide-card { background: #334155; padding: 16px; border-radius: 8px; font-size: 13px; line-height: 1.6; color: #cbd5e1; border-left: 3px solid var(--brand); }
+    .guide-card b { color: #fff; }
+    
+    .btn-build { 
+        background: var(--brand); color: white; border: none; padding: 16px; border-radius: 8px; 
+        font-weight: 600; font-size: 14px; cursor: pointer; margin-top: auto; 
+        transition: 0.2s; box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+    }
+    .btn-build:hover { background: #4f46e5; transform: translateY(-2px); }
+    .btn-build:disabled { background: #475569; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .editor-area { display: flex; flex-direction: column; background: #0F172A; position: relative; }
+    .editor-label { 
+        position: absolute; top: 10px; right: 20px; font-size: 11px; color: #64748B; font-weight: bold; letter-spacing: 1px; 
+        background: #1E293B; padding: 4px 8px; border-radius: 4px;
+    }
+    textarea { 
+        flex: 1; width: 100%; border: none; padding: 40px; 
+        background: transparent; color: #E2E8F0; 
+        font-family: 'D2Coding', 'Menlo', monospace; font-size: 14px; line-height: 1.6; 
+        resize: none; outline: none; white-space: pre; overflow-x: auto;
+    }
+    textarea::placeholder { color: #475569; }
+    
+    #msgBox { text-align: center; font-size: 13px; color: #94A3B8; margin-bottom: 10px; min-height: 20px; }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+    <div class="sidebar">
+        <div class="brand">New Neo<br><span>CareerHigh's Slave V.1</span></div>
+        <div class="guide-card">
+            <b>DESIGN SYSTEM APPLIED</b><br>
+            • <b>Accent Card:</b> &lt;div class="box highlight"&gt;<br>
+            • <b>Grid Layout:</b> data-flex="2"<br>
+            • <b>Badges:</b> &lt;span class="badge"&gt;Text&lt;/span&gt;<br>
+            • <b>Charts:</b> Native PPT Support
+        </div>
+        <div id="msgBox">Ready to Serve, Master.</div>
+        <button id="genBtn" class="btn-build">EXPORT DESIGN DECK</button>
+    </div>
+    <div class="editor-area">
+        <div class="editor-label">HTML SOURCE</div>
+        <textarea id="input" spellcheck="false" placeholder="Paste your HTML here..."></textarea>
+    </div>
+</div>
+
+<script>
+    const genBtn = document.getElementById('genBtn');
+    const input = document.getElementById('input');
+    const msgBox = document.getElementById('msgBox');
+    
+    let pptx;
+
+    // ★ FIXED V13 DESIGN SPECS (V11 Base) ★
+    const SPECS = {
+        layout: 'LAYOUT_16x9',
+        W: 10.0, H: 5.625, margin: 0.5,
+        // Color Palette
+        primary: '1E3A8A', // Deep Navy
+        accent: '3B82F6',  // Bright Blue
+        highlight: 'EFF6FF', // Very Light Blue
+        textMain: '111827',
+        textMuted: '6B7280',
+        bgBox: 'FFFFFF',
+        lineColor: 'E5E7EB',
+        // Typography
+        font: "Pretendard",
+        radius: 5 // Rounded corners (reduced from 6)
+    };
+
+    function uiMsg(txt) { msgBox.textContent = txt; }
+
+    // --- Core Logic Helpers ---
+    function getTextTargets(el) {
+        let targets = [];
+        if (el.matches && el.matches('p, li, .box-text')) targets.push(el);
+        el.querySelectorAll('p, li, .box-text').forEach(c => targets.push(c));
+        return targets;
+    }
+
+    function getVisualLength(str) {
+        let len = 0;
+        for (let i = 0; i < str.length; i++) (str.charCodeAt(i) > 255) ? len += 1.8 : len += 1.0;
+        return len;
+    }
+
+    function getSmartHeight(el, w) {
+        let totalH = 0.3;
+        if (el.querySelector('.box-title')) totalH += 0.5;
+        if (el.querySelector('.badge')) totalH += 0.4;
+
+        getTextTargets(el).forEach(node => {
+            if (node.classList.contains('box-title')) return;
+            const txt = node.textContent.trim();
+            if (!txt) return;
+            const maxChars = w * 17;
+            const lineCount = Math.ceil(getVisualLength(txt) / maxChars) || 1;
+            totalH += (lineCount * 0.35) + 0.15;
+        });
+        return Math.max(totalH + 0.2, 1.2);
+    }
+
+    // --- Main Generation Loop ---
+    genBtn.addEventListener('click', async () => {
+        const html = input.value.trim();
+        if (!html) return uiMsg('Source code is empty.');
+
+        uiMsg('Rendering Design System...');
+        genBtn.disabled = true;
+        await new Promise(r => setTimeout(r, 50));
+
+        try {
+            pptx = new PptxGenJS();
+            pptx.layout = SPECS.layout;
+            pptx.author = 'New Neo CareerHigh Slave V.1';
+
+            // ★ FIXED: Clean Master Slide (No Decorative Shapes)
+            pptx.defineSlideMaster({
+                title: 'DESIGN_MASTER',
+                background: { color: 'FFFFFF' },
+                objects: [
+                    // Top Accent Line Only
+                    { rect: { x: 0.5, y: 0.4, w: 9.0, h: 0.05, fill: SPECS.primary } },
+                    // Footer Text
+                    { text: { text: "CONFIDENTIAL STRATEGY", options: { x: 0.5, y: 5.3, w: 4.0, fontSize: 8, color: SPECS.textMuted, fontFace: SPECS.font } } }
+                ],
+                slideNumber: { x: 9.0, y: 5.3, color: SPECS.textMuted, fontSize: 9, align: 'right', fontFace: SPECS.font }
+            });
+
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const slides = doc.querySelectorAll('.slide');
+
+            if (slides.length === 0) throw new Error("No .slide elements found.");
+
+            slides.forEach((slideElem, idx) => {
+                const titleNode = slideElem.querySelector('.action-title, h1');
+                const titleText = titleNode ? titleNode.textContent.trim() : 'Untitled';
+                const isCover = (idx === 0 && slideElem.querySelector('h1'));
+
+                let slide;
+
+                if (isCover) {
+                    slide = pptx.addSlide();
+                    renderCover(slide, titleText, slideElem);
+                } else {
+                    slide = pptx.addSlide({ masterName: 'DESIGN_MASTER' });
+                    // Title styling
+                    slide.addText(titleText, { x: 0.5, y: 0.55, w: 9, h: 0.6, fontSize: 22, color: SPECS.primary, bold: true, fontFace: SPECS.font });
+
+                    let curY = 1.2;
+                    const contentDiv = slideElem.querySelector('.content') || slideElem;
+                    const blocks = Array.from(contentDiv.children).filter(el => !el.classList.contains('action-title'));
+
+                    blocks.forEach(block => {
+                        let nextH = 0;
+                        const isProcess = block.classList.contains('process-flow');
+
+                        // Special Blocks
+                        if (block.classList.contains('chart-bar')) { renderChart(slide, block, 'bar', curY); curY += 3.5; return; }
+                        if (block.classList.contains('chart-donut')) { renderChart(slide, block, 'doughnut', curY); curY += 3.5; return; }
+                        if (block.classList.contains('wireframe')) { renderWireframe(slide, block, curY); curY += 3.8; return; }
+
+                        // Row Layout
+                        if (block.classList.contains('row')) {
+                            const cols = Array.from(block.children);
+                            const gap = 0.2;
+                            const totalFlex = cols.reduce((acc, col) => acc + (parseFloat(col.dataset.flex) || 1), 0);
+                            const availW = 9.0 - (gap * (cols.length - 1));
+
+                            let maxH = 0;
+                            cols.forEach(c => {
+                                const flex = parseFloat(c.dataset.flex) || 1;
+                                const colW = (availW * (flex / totalFlex));
+                                const h = getSmartHeight(c, colW);
+                                if (h > maxH) maxH = h;
+                            });
+                            nextH = Math.max(maxH, 1.5);
+                        } else if (block.tagName === 'TABLE') {
+                            nextH = (block.querySelectorAll('tr').length * 0.4) + 0.5;
+                        } else if (block.tagName === 'IMG') {
+                            nextH = 3.6;
+                        } else {
+                            nextH = getSmartHeight(block, 9.0);
+                        }
+
+                        // Auto-Pagination
+                        if (curY + nextH > SPECS.H - 0.5) {
+                            slide = pptx.addSlide({ masterName: 'DESIGN_MASTER' });
+                            slide.addText(titleText + " (cont.)", { x: 0.5, y: 0.55, w: 9, h: 0.6, fontSize: 22, color: SPECS.primary, bold: true, fontFace: SPECS.font });
+                            curY = 1.2;
+                        }
+
+                        // Rendering
+                        if (block.classList.contains('row')) {
+                            renderRow(slide, block, curY, nextH, isProcess);
+                        } else if (block.tagName === 'TABLE') {
+                            renderTable(slide, block, curY);
+                        } else if (block.tagName === 'IMG') {
+                            renderImage(slide, block, curY);
+                        } else {
+                            renderBlock(slide, block, curY);
+                        }
+                        curY += nextH + 0.3;
+                    });
+                }
+            });
+
+            await pptx.writeFile({ fileName: `CareerHigh_V13_Design_${new Date().getTime()}.pptx` });
+            uiMsg('Done! High-End PPT Generated.');
+
+        } catch (e) {
+            console.error(e);
+            uiMsg('Error: ' + e.message);
+        } finally {
+            genBtn.disabled = false;
+        }
+    });
+
+    // --- RENDERERS ---
+
+    function renderCover(slide, title, dom) {
+        slide.background = { color: 'FFFFFF' };
+        // Simple cover design (no decorative shapes)
+        slide.addText(title, { x: 1.5, y: 2.0, w: 7.0, h: 2.0, fontSize: 40, color: SPECS.primary, bold: true, align: 'center', fontFace: SPECS.font });
+        
+        const sub = dom.querySelector('.subtitle');
+        if (sub) slide.addText(sub.textContent.trim(), { x: 1.5, y: 3.8, w: 7.0, fontSize: 18, color: SPECS.textMuted, align: 'center', fontFace: SPECS.font });
+        
+        const date = dom.querySelector('.date');
+        if (date) slide.addText(date.textContent.trim(), { x: 1.5, y: 5.0, w: 7.0, fontSize: 11, color: 'AAAAAA', align: 'center', fontFace: SPECS.font });
+    }
+
+    function renderRow(slide, rowDom, y, fixedHeight, isProcess) {
+        const cols = Array.from(rowDom.children);
+        const gap = 0.2;
+        const totalFlex = cols.reduce((acc, col) => acc + (parseFloat(col.dataset.flex) || 1), 0);
+        const availW = 9.0 - (gap * (cols.length - 1));
+        let currentX = 0.5;
+
+        cols.forEach((col, i) => {
+            const flex = parseFloat(col.dataset.flex) || 1;
+            const colW = (availW * (flex / totalFlex));
+
+            // ★ FIXED: Simple Box (No Accent Bar, No Shadow)
+            if (col.classList.contains('box')) {
+                const isHighlight = col.classList.contains('highlight');
+                
+                slide.addShape(pptx.ShapeType.roundRect, {
+                    x: currentX, y: y, w: colW, h: fixedHeight, r: SPECS.radius,
+                    fill: { color: isHighlight ? SPECS.highlight : SPECS.bgBox },
+                    line: { color: SPECS.lineColor, width: 1 }
+                });
+            }
+
+            if (isProcess && i < cols.length - 1) {
+                slide.addShape(pptx.ShapeType.chevron, {
+                    x: currentX + colW + (gap/2) - 0.15, y: y + (fixedHeight/2) - 0.2, w: 0.3, h: 0.4, fill: { color: SPECS.primary }
+                });
+            }
+
+            renderContentInBox(slide, col, currentX + 0.2, y + 0.2, colW - 0.4);
+            currentX += colW + gap;
+        });
+    }
+
+    function renderContentInBox(slide, el, x, y, w) {
+        let curY = y;
+
+        // Badge
+        const badge = el.querySelector('.badge');
+        if (badge) {
+            slide.addShape(pptx.ShapeType.roundRect, { x: x, y: curY, w: 1.0, h: 0.25, r: 10, fill: SPECS.primary });
+            slide.addText(badge.textContent.trim(), { x: x, y: curY, w: 1.0, h: 0.25, align: 'center', fontSize: 9, color: 'FFFFFF', bold: true, fontFace: SPECS.font });
+            curY += 0.45;
+        }
+
+        // Title
+        const title = el.querySelector('.box-title');
+        if (title) {
+            slide.addText(title.textContent.trim(), { 
+                x: x, y: curY, w: w, h: 0.4, 
+                fontSize: 13, color: SPECS.primary, bold: true, fontFace: SPECS.font 
+            });
+            curY += 0.5;
+        }
+
+        // Body Text
+        getTextTargets(el).forEach(node => {
+            if (node.classList.contains('box-title')) return;
+            const txt = node.textContent.trim();
+            if (!txt) return;
+
+            const isList = node.tagName === 'LI';
+            const h = (Math.ceil(getVisualLength(txt) / (w * 17)) || 1) * 0.35 + 0.1;
+
+            let color = SPECS.textMain;
+            if (node.classList.contains('text-red')) color = 'EF4444';
+            if (node.classList.contains('text-blue')) color = SPECS.accent;
+
+            slide.addText(txt, {
+                x: x, y: curY, w: w, h: h,
+                fontSize: 11, color: color,
+                bullet: isList ? { indent: 10, code: '2022', color: SPECS.accent } : false,
+                breakLine: true, fontFace: SPECS.font, valign: 'top',
+                lineSpacing: 18
+            });
+            curY += h;
+        });
+    }
+
+    function renderImage(slide, imgEl, y) {
+        const src = imgEl.src;
+        if (!src) return;
+        const sizing = imgEl.dataset.fit || 'contain';
+        const imgW = 6.0; const imgH = 3.5; const x = (SPECS.W - imgW) / 2;
+        slide.addImage({ path: src, x: x, y: y, w: imgW, h: imgH, sizing: { type: sizing, w: imgW, h: imgH } });
+    }
+
+    function renderTable(slide, table, y) {
+        const rows = [];
+        table.querySelectorAll('tr').forEach((tr, rIdx) => {
+            const rowData = [];
+            tr.querySelectorAll('td, th').forEach(cell => {
+                const isHead = cell.tagName === 'TH' || tr.parentElement.tagName === 'THEAD';
+                rowData.push({
+                    text: cell.textContent.trim(),
+                    options: {
+                        fill: isHead ? SPECS.primary : (rIdx % 2 === 0 ? 'FFFFFF' : 'F3F4F6'),
+                        color: isHead ? 'FFFFFF' : SPECS.textMain,
+                        bold: isHead, fontSize: 10, fontFace: SPECS.font,
+                        border: { color: SPECS.lineColor, pt: 1 }, align: isHead ? 'center' : 'left'
+                    }
+                });
+            });
+            rows.push(rowData);
+        });
+        slide.addTable(rows, { x: 0.5, y: y, w: 9.0, rowH: 0.4 });
+    }
+
+    function renderChart(slide, el, type, y) {
+        try {
+            const labels = JSON.parse(el.dataset.labels);
+            const values = JSON.parse(el.dataset.values);
+            const title = el.dataset.title || "Chart";
+            const dataChart = [{ name: title, labels: labels, values: values }];
+            const opts = { x: 1.0, y: y, w: 8, h: 3.2, chartColors: [SPECS.primary, SPECS.accent, 'CBD5E1'] };
+            
+            if (type === 'bar') { opts.barDir = 'col'; slide.addChart(pptx.ChartType.bar, dataChart, opts); }
+            else { opts.w = 4; opts.x = 3; slide.addChart(pptx.ChartType.doughnut, dataChart, opts); }
+        } catch (e) { console.error("Chart Error"); }
+    }
+
+    function renderWireframe(slide, el, y) {
+        const title = el.textContent.trim();
+        slide.addShape(pptx.ShapeType.rect, { x: 2.0, y: y, w: 6.0, h: 3.5, fill: 'FFFFFF', line: { color: 'E2E8F0', dashType: 'dash' } });
+        slide.addText(`UI MOCKUP: ${title}`, { x: 2.0, y: y + 1.5, w: 6.0, h: 0.5, align: 'center', color: 'CBD5E1', bold: true, fontFace: SPECS.font });
+    }
+
+    function renderBlock(slide, block, y) { renderContentInBox(slide, block, 0.5, y, 9.0); }
+</script>
+</body>
+</html>
