@@ -2,167 +2,31 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Career High PT Converter</title>
+  <title>Career High PT Converter (Strict Mode)</title>
   
+  <!-- 라이브러리 로드 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.min.js"></script>
+
   <style>
-    /* =========================================
-       Career High Style System
-       ========================================= */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", sans-serif;
-      background: #F4F6F8;
-      color: #333;
-      padding: 20px;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .container {
-      width: 100%;
-      max-width: 1000px;
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-      padding: 40px;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 40px;
-      border-bottom: 2px solid #F4F6F8;
-      padding-bottom: 20px;
-    }
-
-    h1 {
-      color: #0071EC;
-      font-size: 28px;
-      font-weight: 800;
-      margin-bottom: 10px;
-    }
-
-    .subtitle {
-      color: #666;
-      font-size: 16px;
-    }
-
-    .input-area {
-      margin-bottom: 30px;
-    }
-
-    label {
-      display: block;
-      font-weight: 700;
-      margin-bottom: 10px;
-      color: #333;
-    }
-
-    textarea {
-      width: 100%;
-      height: 300px;
-      padding: 20px;
-      border: 2px solid #E5E7EB;
-      border-radius: 12px;
-      font-family: 'Consolas', monospace;
-      font-size: 14px;
-      resize: vertical;
-      line-height: 1.5;
-    }
-
-    textarea:focus {
-      outline: none;
-      border-color: #0071EC;
-      background-color: #F8FAFC;
-    }
-
-    .btn-area {
-      text-align: center;
-    }
-
-    button {
-      background: #0071EC;
-      color: white;
-      border: none;
-      padding: 16px 40px;
-      font-size: 18px;
-      font-weight: 700;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: all 0.2s;
-      width: 100%;
-    }
-
-    button:hover {
-      background: #005bbd;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0, 113, 236, 0.3);
-    }
-
-    button:disabled {
-      background: #ccc;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-    }
-
-    .status {
-      margin-top: 20px;
-      padding: 15px;
-      border-radius: 8px;
-      text-align: center;
-      font-weight: 600;
-      display: none;
-    }
-    .status.success { background: #E3FCEF; color: #006644; }
-    .status.error { background: #FFEBE6; color: #BF2600; }
-    .status.info { background: #DEEBFF; color: #0747A6; }
-
-    .guide-box {
-      background: #F8F9FA;
-      padding: 20px;
-      border-radius: 8px;
-      margin-top: 30px;
-      font-size: 14px;
-      color: #666;
-      line-height: 1.6;
-    }
+    /* UI 스타일 (기존과 동일하므로 축약) */
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:-apple-system, sans-serif; background:#F4F6F8; padding:20px; display:flex; justify-content:center; }
+    .container { width:100%; max-width:1000px; background:white; padding:40px; border-radius:16px; box-shadow:0 4px 20px rgba(0,0,0,0.08); }
+    h1 { color:#0071EC; text-align:center; margin-bottom:30px; }
+    textarea { width:100%; height:300px; padding:15px; border:2px solid #E5E7EB; border-radius:8px; font-family:'Consolas', monospace; resize:vertical; }
+    button { background:#0071EC; color:white; border:none; padding:15px; width:100%; border-radius:8px; font-size:18px; font-weight:bold; cursor:pointer; margin-top:20px; }
+    button:hover { background:#005bbd; }
+    .status { margin-top:20px; text-align:center; font-weight:bold; color:#0071EC; }
   </style>
-  
-  <!-- [FIX] 번들 버전 사용 (JSZip 등 의존성 포함) -->
-  <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.bundle.js"></script>
 </head>
 <body>
 
   <div class="container">
-    <div class="header">
-      <h1>Career High PT Generator</h1>
-      <p class="subtitle">Claude가 생성한 HTML 코드를 붙여넣으세요</p>
-    </div>
-
-    <div class="input-area">
-      <label>HTML 코드 입력</label>
-      <textarea id="htmlInput" placeholder="여기에 Claude가 만든 코드를 붙여넣으세요..."></textarea>
-    </div>
-
-    <div class="btn-area">
-      <button id="convertBtn">PPTX 파일로 변환하기</button>
-    </div>
-
+    <h1>Career High PT Generator (Strict)</h1>
+    <textarea id="htmlInput" placeholder="Claude가 생성한 HTML 코드를 여기에 붙여넣으세요..."></textarea>
+    <button id="convertBtn">PPTX로 변환하기 (Strict Mode)</button>
     <div id="statusMessage" class="status"></div>
-
-    <div class="guide-box">
-      <strong>📌 가이드북 사양 준수 (Fixed Layout)</strong>
-      <ul style="margin-left: 20px; margin-top: 10px;">
-        <li>H1 제목: 32pt (Arial Bold)</li>
-        <li>본문 내용: 14pt (가독성 최적화)</li>
-        <li>데이터 표: 11-12pt (파란색 헤더)</li>
-        <li>브랜드 컬러: #0071EC 적용</li>
-      </ul>
-    </div>
   </div>
 
   <script>
@@ -170,133 +34,120 @@
     const htmlInput = document.getElementById('htmlInput');
     const statusMessage = document.getElementById('statusMessage');
 
-    function showStatus(msg, type) {
-      statusMessage.textContent = msg;
-      statusMessage.className = `status show ${type}`;
-      statusMessage.style.display = 'block';
-    }
+    // [중요] PPTX 좌표/크기 상수 정의 (단위: 인치)
+    // 16:9 슬라이드 크기 = 10 x 5.625 인치
+    const LAYOUT = {
+        MARGIN_LEFT: 0.5,
+        width: 9.0, // 좌우 여백 0.5씩 뺌
+        y_h2: 0.4,  // 소제목 위치
+        y_h1: 0.8,  // 대제목 위치
+        y_body: 2.0 // 본문 시작 위치
+    };
 
     convertBtn.addEventListener('click', async () => {
       const html = htmlInput.value.trim();
-      
-      if (!html) {
-        showStatus('HTML 코드를 입력해주세요.', 'error');
-        return;
-      }
+      if (!html) return alert('HTML 코드를 입력하세요.');
 
       convertBtn.disabled = true;
       convertBtn.textContent = '변환 중...';
-      showStatus('PPTX 파일을 생성하고 있습니다...', 'info');
 
       try {
-        // [FIX] 라이브러리 로드 확인 및 초기화
-        let pptx;
-        if (typeof PptxGenJS === 'function') {
-            pptx = new PptxGenJS();
-        } else if (typeof window.PptxGenJS === 'function') {
-            pptx = new window.PptxGenJS();
-        } else {
-            throw new Error('PptxGenJS 라이브러리가 로드되지 않았습니다. 인터넷 연결을 확인하세요.');
-        }
-        
-        // 1. 기본 설정 (가이드북 사양)
+        let pptx = new PptxGenJS();
         pptx.layout = 'LAYOUT_16x9';
         pptx.author = 'Career High';
         pptx.title = 'Presentation';
 
-        // 2. HTML 파싱
         const parser = new DOMParser();
         const doc = parser.parseFromString(html, 'text/html');
         const slides = doc.querySelectorAll('.slide');
 
-        if (slides.length === 0) {
-          throw new Error('슬라이드를 찾을 수 없습니다. (class="slide" 누락 확인)');
-        }
+        if (slides.length === 0) throw new Error('슬라이드(.slide)를 찾을 수 없습니다.');
 
-        // 3. 슬라이드 루프
         slides.forEach((slideElem) => {
           const slide = pptx.addSlide();
           slide.background = { color: 'FFFFFF' };
 
-          // Y축 커서 (위에서 아래로 쌓이는 구조)
-          let yPos = 0.5;
+          // Y축 커서 (현재 높이 추적)
+          let currentY = LAYOUT.y_body;
 
-          // [요소 1] 소제목 (H2) - 파란색, 작게
+          // 1. 소제목 (H2) - 고정 위치
           const h2 = slideElem.querySelector('h2');
           if (h2) {
             slide.addText(h2.textContent.trim(), {
-              x: 0.5, y: yPos, w: 9.0, h: 0.3,
+              x: LAYOUT.MARGIN_LEFT, y: LAYOUT.y_h2, w: LAYOUT.width, h: 0.3,
               fontSize: 14, color: '0071EC', bold: true, fontFace: 'Arial'
             });
-            yPos += 0.35;
           }
 
-          // [요소 2] 메인 제목 (H1) - 검정, 32pt (가이드북 준수)
+          // 2. 대제목 (H1) - 고정 위치
           const h1 = slideElem.querySelector('h1');
           if (h1) {
-            // 줄바꿈 태그 처리
             let titleText = h1.innerHTML.replace(/<br\s*\/?>/gi, '\n');
-            // HTML 태그 제거
             const temp = document.createElement('div');
             temp.innerHTML = titleText;
-            titleText = temp.textContent;
-
-            slide.addText(titleText, {
-              x: 0.5, y: yPos, w: 9.0,
-              fontSize: 32, color: '111111', bold: true, fontFace: 'Arial',
-              lineSpacing: 38
+            
+            slide.addText(temp.textContent, {
+              x: LAYOUT.MARGIN_LEFT, y: LAYOUT.y_h1, w: LAYOUT.width,
+              fontSize: 36, color: '111111', bold: true, fontFace: 'Arial',
+              lineSpacing: 42 // 줄간격 꽉 조임
             });
-            yPos += 1.2; // 제목 여백 확보
           }
 
-          // [요소 3] Key Box (강조 박스)
+          // --- 여기서부터 유동 콘텐츠 ---
+
+          // 3. Key Box (강조 박스)
           const keyBox = slideElem.querySelector('.key-box');
           if (keyBox) {
-            // 파란색 배경 박스
+            // 박스 그리기
             slide.addShape(pptx.ShapeType.rect, {
-              x: 0.5, y: yPos, w: 9.0, h: 0.8,
-              fill: { color: 'E8F4FF' },
-              line: { color: '0071EC', width: 3 }
+              x: LAYOUT.MARGIN_LEFT, y: currentY, w: LAYOUT.width, h: 0.9,
+              fill: { color: 'F0F7FF' },
+              line: { color: '0071EC', width: 2 } // 전체 테두리로 변경하여 깔끔함 유지
             });
-            
-            // 박스 안 텍스트
+            // 텍스트 넣기
             slide.addText(keyBox.textContent.trim(), {
-              x: 0.7, y: yPos + 0.1, w: 8.6,
-              fontSize: 14, color: '111111', bold: true, fontFace: 'Arial'
+              x: LAYOUT.MARGIN_LEFT + 0.2, y: currentY + 0.1, w: LAYOUT.width - 0.4,
+              fontSize: 16, color: '004085', bold: true, fontFace: 'Arial',
+              align: 'left'
             });
-            yPos += 1.0;
+            currentY += 1.2; // 박스 높이 + 여백만큼 이동
           }
 
-          // [요소 4] 본문 (P) - 14pt (가이드북 준수)
+          // 4. 본문 (P)
           const ps = slideElem.querySelectorAll('p:not(.key-box)');
           ps.forEach(p => {
+             // 텍스트 길이 체크하여 높이 계산 (대략적)
+             const textLen = p.textContent.length;
+             const estHeight = textLen > 80 ? 0.8 : 0.4;
+
              slide.addText(p.textContent.trim(), {
-               x: 0.5, y: yPos, w: 9.0,
-               fontSize: 14, color: '666666', fontFace: 'Arial', lineSpacing: 20
+               x: LAYOUT.MARGIN_LEFT, y: currentY, w: LAYOUT.width, h: estHeight,
+               fontSize: 16, color: '333333', fontFace: 'Arial', lineSpacing: 22,
+               align: 'justify' // 양쪽 정렬로 깔끔하게
              });
-             yPos += 0.5;
+             currentY += estHeight + 0.2;
           });
 
-          // [요소 5] 리스트 (UL > LI)
+          // 5. 리스트 (UL)
           const ul = slideElem.querySelector('ul');
           if (ul) {
             const lis = ul.querySelectorAll('li');
             lis.forEach(li => {
               slide.addText('• ' + li.textContent.trim(), {
-                x: 0.6, y: yPos, w: 8.9,
-                fontSize: 14, color: '444444', fontFace: 'Arial',
-                breakLine: true
+                x: LAYOUT.MARGIN_LEFT + 0.2, y: currentY, w: LAYOUT.width - 0.2, h: 0.4,
+                fontSize: 15, color: '444444', fontFace: 'Arial'
               });
-              yPos += 0.35;
+              currentY += 0.45;
             });
+            currentY += 0.2;
           }
 
-          // [요소 6] 데이터 표 (Table) - 11~12pt (가이드북 준수)
+          // 6. 데이터 표 (Table) - 가장 중요!
           const table = slideElem.querySelector('table');
           if (table) {
             const rows = [];
             
-            // 헤더 (thead)
+            // 헤더 처리
             const thead = table.querySelector('thead');
             if (thead) {
               const ths = thead.querySelectorAll('th');
@@ -304,53 +155,53 @@
                 text: th.textContent.trim(),
                 options: { 
                   fill: '0071EC', color: 'FFFFFF', bold: true, 
-                  fontSize: 12, align: 'center' 
+                  fontSize: 12, align: 'center', valign: 'middle'
                 }
               })));
             }
 
-            // 본문 (tbody)
+            // 본문 처리
             const trs = table.querySelectorAll('tbody tr');
             trs.forEach(tr => {
               const tds = tr.querySelectorAll('td');
               rows.push(Array.from(tds).map(td => ({
                 text: td.textContent.trim(),
                 options: { 
-                  fontSize: 11, color: '333333', 
-                  fill: 'FFFFFF', align: 'left' 
+                  fontSize: 11, color: '333333', fill: 'FFFFFF', 
+                  align: 'center', valign: 'middle',
+                  border: { pt: 1, color: 'E1E1E1' } // 셀 테두리 연하게
                 }
               })));
             });
 
             if (rows.length > 0) {
               slide.addTable(rows, {
-                x: 0.5, y: yPos, w: 9.0,
-                border: { color: 'E2E8F0', pt: 1 },
-                rowH: 0.4
+                x: LAYOUT.MARGIN_LEFT, y: currentY, w: LAYOUT.width,
+                rowH: 0.4, // 행 높이 고정
+                border: { color: '0071EC', pt: 2 } // 외곽 테두리 진하게
               });
+              // 표 높이만큼 커서 이동 (행 개수 * 0.4)
+              currentY += (rows.length * 0.4) + 0.5;
             }
           }
 
-          // [요소 7] 슬라이드 번호
+          // 7. 페이지 번호
           const pageNum = slideElem.getAttribute('data-page');
           if (pageNum) {
-            slide.addText(pageNum, {
-              x: 9.0, y: 5.2, fontSize: 10, color: 'BBBBBB', bold: true
+            slide.addText(pageNum, { 
+              x: 9.2, y: 5.2, fontSize: 10, color: 'BBBBBB', bold: true 
             });
           }
-
         });
 
-        // 4. 저장
-        await pptx.writeFile({ fileName: 'Presentation_Fixed.pptx' });
-        showStatus('✅ 완료! 다운로드 폴더를 확인하세요.', 'success');
+        await pptx.writeFile({ fileName: 'Presentation_Strict.pptx' });
+        statusMessage.textContent = '✅ 완료! 파일이 다운로드되었습니다.';
 
       } catch (error) {
         console.error(error);
-        showStatus('❌ 오류: ' + error.message, 'error');
-      } finally {
+        alert('오류 발생: ' + error.message);
         convertBtn.disabled = false;
-        convertBtn.textContent = 'PPTX 파일로 변환하기';
+        convertBtn.textContent = 'PPTX로 변환하기 (Strict Mode)';
       }
     });
   </script>
