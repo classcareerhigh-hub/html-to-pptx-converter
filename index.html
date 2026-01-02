@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZENITH V10.4: CareerHigh Strategy Engine</title>
+  <title>ZENITH V10.5: Official Color Patch</title>
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.min.js"></script>
@@ -13,8 +13,8 @@
   <style>
     /* CareerHigh Official Theme */
     :root { 
-        --brand: #0071EC; /* Primary Blue */
-        --accent: #5050EF; /* Emphasis Purple-Blue */
+        --brand: #0071EC; /* Primary Blue (Basic) */
+        --accent: #5050EF; /* Emphasis (Strong) */
         --bg: #1a1a1a; 
         --panel: #262626; 
         --text: #f5f5f5; 
@@ -55,13 +55,13 @@
 
 <div class="layout">
     <div class="sidebar">
-        <div class="brand">ZENITH <span>V10.4</span></div>
+        <div class="brand">ZENITH <span>V10.5</span></div>
         <div class="guide-box">
-            <strong>OFFICIAL STRATEGY DECK</strong>
-            • <strong>Complete:</strong> Image/Chart Support Active<br>
-            • <strong>Aligned:</strong> Equal Height Row Logic<br>
-            • <strong>Branded:</strong> CareerHigh Blue System<br>
-            • <strong>Status:</strong> Bug Fixed (Image Loop)
+            <strong>COLOR CALIBRATION</strong>
+            • <strong>Primary:</strong> #0071EC (Titles, Box Headers, Highlights)<br>
+            • <strong>Accent:</strong> #5050EF (Arrows, Special Emphasis)<br>
+            • <strong>Logic:</strong> Corrected 'Purple' Tint Issue<br>
+            • <strong>Status:</strong> Official Brand Matched
         </div>
         <div id="msgBox">Ready to Build</div>
         <button id="genBtn" class="btn-build">GENERATE OFFICIAL DECK</button>
@@ -82,14 +82,14 @@
     
     let pptx;
 
-    // ★ OFFICIAL CAREER HIGH DESIGN SPECS ★
+    // ★ OFFICIAL CAREER HIGH DESIGN SPECS (Calibrated) ★
     const SPECS = {
         layout: 'LAYOUT_16x9',
         W: 10.0, H: 5.625, margin: 0.5,
         
-        // Colors
-        primary: '0071EC', // CareerHigh Blue
-        accent: '5050EF',  // Emphasis
+        // Colors (Fixed Mapping)
+        primary: '0071EC', // Basic Blue (Headers, Key Text)
+        accent: '5050EF',  // Strong Emphasis (Arrows, Special)
         textMain: '333333', 
         textMuted: '666666',
         bgBox: 'F4F6F9', 
@@ -141,7 +141,7 @@
         const html = input.value.trim();
         if(!html) return uiMsg('HTML 코드를 입력해주세요.');
 
-        uiMsg('Architecting Strategy Deck...');
+        uiMsg('Generating Official Deck...');
         genBtn.disabled = true;
         await new Promise(r => setTimeout(r, 50));
 
@@ -155,7 +155,7 @@
                 title: 'STRATEGY_MASTER',
                 background: { color: 'FFFFFF' },
                 objects: [
-                    // Top Brand Bar
+                    // Top Brand Bar (Primary Blue 0071EC)
                     { rect: { x: 0.5, y: 0.4, w: 9.0, h: 0.05, fill: SPECS.primary } },
                     // Footer Slogan
                     { text: { text: "CareerHigh Official Strategy Deck", options: { x: 0.5, y: 5.2, w: 4.0, fontSize: 9, color: SPECS.textMuted, fontFace: SPECS.font } } }
@@ -181,7 +181,7 @@
                     renderCover(slide, titleText, slideElem);
                 } else {
                     slide = pptx.addSlide({ masterName: 'STRATEGY_MASTER' });
-                    // Title below the bar
+                    // Title (Primary Blue 0071EC)
                     slide.addText(titleText, { x:0.5, y:0.55, w:9, h:0.6, fontSize:20, color:SPECS.primary, bold:true, fontFace:SPECS.font });
                     
                     let curY = SPECS.contentY;
@@ -192,7 +192,6 @@
                         let nextH = 0;
                         const isProcess = block.classList.contains('process-flow');
                         
-                        // 1. Height Calculation Logic (★ Fixed: Image Support Added)
                         if(block.classList.contains('row')) {
                             const cols = Array.from(block.children);
                             const gap = isProcess ? 0.3 : 0.2;
@@ -207,19 +206,19 @@
                         } else if(block.tagName === 'TABLE') {
                             nextH = (block.querySelectorAll('tr').length * 0.4) + 0.5;
                         } else if(block.tagName === 'IMG') {
-                            nextH = 3.6; // Fixed Height for Image
+                            nextH = 3.6; 
                         } else {
                             nextH = getSmartHeight(block, 9.0);
                         }
 
-                        // 2. Auto-Pagination
+                        // Auto-Pagination
                         if (curY + nextH > SPECS.H - 0.5) {
                             slide = pptx.addSlide({ masterName: 'STRATEGY_MASTER' });
                             slide.addText(titleText + " (cont.)", { x:0.5, y:0.55, w:9, h:0.6, fontSize:20, color:SPECS.primary, bold:true, fontFace:SPECS.font });
                             curY = SPECS.contentY;
                         }
 
-                        // 3. Rendering (★ Fixed: Image Renderer Connected)
+                        // Rendering
                         if(block.classList.contains('row')) {
                             renderRow(slide, block, curY, nextH, isProcess);
                         } else if(block.tagName === 'TABLE') {
@@ -252,7 +251,8 @@
         // Clean, Center-Aligned Cover
         slide.addText(title, { x:0.5, y:2.2, w:9, h:1.5, fontSize:44, color:SPECS.primary, bold:true, align:'center', fontFace:SPECS.font });
         const sub = dom.querySelector('.subtitle');
-        if(sub) slide.addText(sub.textContent.trim(), { x:1.5, y:3.8, w:7, fontSize:20, color:SPECS.accent, align:'center', fontFace:SPECS.font });
+        // Subtitle uses Primary Blue (Basic)
+        if(sub) slide.addText(sub.textContent.trim(), { x:1.5, y:3.8, w:7, fontSize:20, color:SPECS.primary, align:'center', fontFace:SPECS.font });
         const date = dom.querySelector('.date, div > p > strong');
         if(date) slide.addText(date.textContent.trim(), { x:0.5, y:5.0, w:9, fontSize:12, color:SPECS.textMuted, align:'center', fontFace:SPECS.font });
     }
@@ -265,7 +265,6 @@
         cols.forEach((col, i) => {
             const x = 0.5 + (i * (colW + gap));
             
-            // Box Background
             if(col.classList.contains('box')) {
                 slide.addShape(pptx.ShapeType.rect, {
                     x:x, y:y, w:colW, h:fixedHeight,
@@ -273,13 +272,13 @@
                 });
             }
 
-            // Arrow Logic (Accent Color)
+            // Arrow uses Accent (5050EF) for Flow Pop
             if (isProcess && i < cols.length - 1) {
                 const arrowX = x + colW;
                 const arrowY = y + (fixedHeight / 2) - 0.15;
                 slide.addShape(pptx.ShapeType.rightArrow, {
                     x: arrowX + 0.05, y: arrowY, w: 0.2, h: 0.3,
-                    fill: { color: SPECS.accent }
+                    fill: { color: SPECS.accent } 
                 });
             }
 
@@ -296,6 +295,7 @@
                 rowData.push({
                     text: cell.textContent.trim(),
                     options: {
+                        // Table Headers use Primary Blue (0071EC)
                         fill: isHead ? SPECS.primary : (rIdx%2===0 ? 'FFFFFF' : 'F9F9F9'),
                         color: isHead ? 'FFFFFF' : SPECS.textMain,
                         bold: isHead, fontSize:11, fontFace:SPECS.font,
@@ -308,17 +308,14 @@
         slide.addTable(rows, { x:0.5, y:y, w:9.0, rowH:0.4 });
     }
 
-    // ★ Image Renderer
     function renderImage(slide, imgEl, y) {
         const src = imgEl.src;
         if(!src) return;
         const imgW = 6.0; 
         const imgH = 3.5; 
-        const x = (SPECS.W - imgW) / 2; // Center
+        const x = (SPECS.W - imgW) / 2;
         slide.addImage({ 
-            path: src, 
-            x: x, y: y, 
-            w: imgW, h: imgH, 
+            path: src, x: x, y: y, w: imgW, h: imgH, 
             sizing: { type: 'contain', w: imgW, h: imgH } 
         });
     }
@@ -331,7 +328,8 @@
         let curY = y;
         const title = el.querySelector('.box-title');
         if(title) {
-            slide.addText(title.textContent.trim(), { x:x, y:curY, w:w, h:0.4, fontSize:14, color:SPECS.accent, bold:true, fontFace:SPECS.font });
+            // ★ FIX: Box Titles now use Primary Blue (0071EC) for cleaner look
+            slide.addText(title.textContent.trim(), { x:x, y:curY, w:w, h:0.4, fontSize:14, color:SPECS.primary, bold:true, fontFace:SPECS.font });
             curY += 0.5;
         }
 
@@ -347,8 +345,13 @@
             const h = (lineCount * 0.35) + 0.1;
 
             let color = SPECS.textMain;
-            if(node.classList.contains('text-red')) color = 'D00000'; // Risk Red
-            if(node.classList.contains('text-blue')) color = SPECS.accent; // Official Accent
+            if(node.classList.contains('text-red')) color = 'D00000'; 
+            
+            // ★ FIX: text-blue maps to Primary Blue (0071EC) for consistency
+            if(node.classList.contains('text-blue')) color = SPECS.primary; 
+            
+            // ★ ADD: text-accent maps to Accent Purple (5050EF) if explicitly needed
+            if(node.classList.contains('text-accent')) color = SPECS.accent;
 
             slide.addText(txt, {
                 x:x, y:curY, w:w, h:h,
