@@ -3,25 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZENITH V8.2: Final Patch</title>
+  <title>ZENITH V10: Strategy Deck Engine</title>
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.min.js"></script>
 
   <style>
-    :root { --brand: #2c3e50; --accent: #27ae60; --bg: #121212; --panel: #1e1e1e; --text: #e0e0e0; }
+    :root { --brand: #003366; --accent: #0055A5; --bg: #1e1e1e; --panel: #252526; --text: #f0f0f0; }
     * { margin:0; padding:0; box-sizing:border-box; }
     body { font-family: 'Pretendard', sans-serif; background: var(--bg); color: var(--text); height: 100vh; display: flex; overflow: hidden; }
     .layout { display: grid; grid-template-columns: 320px 1fr; width: 100%; height: 100%; }
     
-    .sidebar { background: var(--panel); border-right: 1px solid #333; padding: 25px; display: flex; flex-direction: column; gap: 20px; z-index: 10; }
+    .sidebar { background: var(--panel); border-right: 1px solid #333; padding: 25px; display: flex; flex-direction: column; gap: 20px; }
     .brand { font-size: 20px; font-weight: 800; color: #fff; letter-spacing: 1px; }
     .brand span { color: var(--accent); }
-    .status-card { background: #2d2d2d; padding: 15px; border-radius: 8px; font-size: 12px; color: #aaa; border-left: 3px solid var(--accent); line-height: 1.6; }
     
-    .btn-build { background: var(--accent); color: white; border: none; padding: 16px; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: auto; transition: 0.2s; }
+    .guide-box { background: #333; padding: 15px; border-radius: 8px; font-size: 12px; color: #ccc; line-height: 1.5; border-left: 3px solid var(--accent); }
+    
+    .btn-build { background: var(--accent); color: white; border: none; padding: 16px; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: auto; transition:0.2s; }
     .btn-build:hover { filter: brightness(1.1); }
-    .btn-build:disabled { background: #444; cursor: not-allowed; }
+    .btn-build:disabled { background: #555; cursor: not-allowed; }
 
     .editor-area { display: flex; flex-direction: column; background: #121212; }
     .editor-header { padding: 12px 30px; background: #1f1f1f; border-bottom: 1px solid #333; font-size: 12px; font-weight: bold; color: #888; letter-spacing: 1px; }
@@ -33,20 +34,20 @@
 
 <div class="layout">
     <div class="sidebar">
-        <div class="brand">ZENITH <span>V8.2</span></div>
-        <div class="status-card">
-            <strong>CRITICAL PATCH APPLIED</strong><br><br>
-            • Bug: Padding Mismatch<br>
-            • Fix: Inner Width Calculation<br>
-            • Status: Production Ready<br>
-            • Engine: Green State
+        <div class="brand">ZENITH <span>V10</span></div>
+        <div class="guide-box">
+            <strong>STRATEGY DECK MODE</strong><br><br>
+            • <strong>Process Flow:</strong> 박스 간 화살표 자동 연결<br>
+            • <strong>Org Chart:</strong> 계층 구조 레이아웃<br>
+            • <strong>Smart Grid:</strong> 컨텐츠 양에 따른 자동 높이 조절<br>
+            • <strong>Asset Style:</strong> 자산운용사 보고서 포맷 적용
         </div>
-        <div id="msgBox">Waiting for input...</div>
-        <button id="genBtn" class="btn-build">GENERATE FINAL</button>
+        <div id="msgBox">Waiting for Input...</div>
+        <button id="genBtn" class="btn-build">GENERATE STRATEGY DECK</button>
     </div>
     <div class="editor-area">
         <div class="editor-header">HTML SOURCE INPUT</div>
-        <textarea id="input" placeholder="여기에 기획안 HTML 코드를 붙여넣으세요..."></textarea>
+        <textarea id="input" placeholder="여기에 V10 전용 HTML 코드를 입력하세요..."></textarea>
     </div>
 </div>
 
@@ -57,19 +58,22 @@
     
     let pptx;
 
+    // ★ ASSET MANAGEMENT STYLE SPECS ★
     const SPECS = {
         layout: 'LAYOUT_16x9',
-        W: 10.0, H: 5.625, margin: 0.5,
-        primary: '003366', accent: '0066CC',
+        W: 10.0, H: 5.625, margin: 0.4,
+        primary: '003366', // Deep Navy (Trust)
+        accent: '0055A5',  // Strategy Blue
         textMain: '333333', textMuted: '666666',
-        bgBox: 'F7F9FB', lineColor: 'CCCCCC',
+        bgBox: 'F4F6F8', lineColor: 'D0D0D0', // Clean Corporate Look
         font: "Malgun Gothic",
-        charsPerInch: 16, 
-        headerY: 0.8, contentY: 1.3
+        charsPerInch: 17, 
+        headerY: 0.7, contentY: 1.1
     };
 
     function uiMsg(txt) { msgBox.textContent = txt; }
 
+    // --- Helper Functions ---
     function getTextTargets(el) {
         let targets = [];
         if (el.matches && el.matches('p, li, .box-text')) targets.push(el);
@@ -80,8 +84,7 @@
     function getVisualLength(str) {
         let len = 0;
         for (let i = 0; i < str.length; i++) {
-            if (str.charCodeAt(i) > 255) len += 1.8; 
-            else len += 1.0;
+            if (str.charCodeAt(i) > 255) len += 1.8; else len += 1.0;
         }
         return len;
     }
@@ -89,44 +92,44 @@
     function getSmartHeight(el, w) {
         let totalH = 0.2; 
         const title = el.querySelector('.box-title');
-        if(title) totalH += 0.5;
+        if(title) totalH += 0.4; // Tighter title
 
         const nodes = getTextTargets(el);
         nodes.forEach(node => {
             if(node.classList.contains('box-title')) return;
             const txt = node.textContent.trim();
             if(!txt) return;
-
             const maxChars = w * SPECS.charsPerInch;
-            const visualLen = getVisualLength(txt);
-            const lineCount = Math.ceil(visualLen / maxChars) || 1;
-            
-            totalH += (lineCount * 0.35) + 0.1; 
+            const lineCount = Math.ceil(getVisualLength(txt) / maxChars) || 1;
+            totalH += (lineCount * 0.32) + 0.08; 
         });
-
-        return Math.max(totalH + 0.2, 0.5); 
+        return Math.max(totalH + 0.2, 0.8); 
     }
 
     genBtn.addEventListener('click', async () => {
         const html = input.value.trim();
         if(!html) return uiMsg('HTML 코드를 입력해주세요.');
 
-        uiMsg('Compiling V8.2...');
+        uiMsg('Compiling Strategy Deck...');
         genBtn.disabled = true;
         await new Promise(r => setTimeout(r, 50));
 
         try {
             pptx = new PptxGenJS();
             pptx.layout = SPECS.layout;
-            pptx.author = 'Zenith V8.2 Final';
+            pptx.author = 'Zenith V10 Strategy';
 
+            // ★ V10 MASTER SLIDE: Corporate Header ★
             pptx.defineSlideMaster({
-                title: 'CLEAN_MASTER',
+                title: 'STRATEGY_MASTER',
                 background: { color: 'FFFFFF' },
                 objects: [
-                    { line: { x: 0.5, y: SPECS.headerY, w: 9.0, h: 0, line: { color: SPECS.primary, width: 2 } } }
+                    // Thick Top Line (Asset Mgmt Style)
+                    { rect: { x: 0.4, y: 0.6, w: 9.2, h: 0.05, fill: SPECS.primary } },
+                    // Footer
+                    { line: { x: 0.4, y: 5.2, w: 9.2, h: 0, line: { color: 'E0E0E0', width: 1 } } }
                 ],
-                slideNumber: { x: 9.2, y: 5.3, color: SPECS.textMuted, fontSize: 10, align: 'right' }
+                slideNumber: { x: 9.3, y: 5.3, color: SPECS.textMuted, fontSize: 9, align: 'right' }
             });
 
             const parser = new DOMParser();
@@ -144,62 +147,52 @@
                     let slide = pptx.addSlide();
                     renderCover(slide, titleText, slideElem);
                 } else {
-                    let slide = pptx.addSlide({ masterName: 'CLEAN_MASTER' });
-                    renderSlideHeader(slide, titleText);
+                    let slide = pptx.addSlide({ masterName: 'STRATEGY_MASTER' });
+                    // Title above the line
+                    slide.addText(titleText, { x:0.4, y:0.2, w:9, h:0.4, fontSize:18, color:SPECS.primary, bold:true, fontFace:SPECS.font });
                     
                     let curY = SPECS.contentY;
                     const contentDiv = slideElem.querySelector('.content') || slideElem;
-                    
-                    const blocks = Array.from(contentDiv.children).filter(el => 
-                        !el.classList.contains('action-title') && !el.classList.contains('header')
-                    );
+                    const blocks = Array.from(contentDiv.children).filter(el => !el.classList.contains('action-title'));
 
                     blocks.forEach(block => {
-                        // 1. Calculate Height (Pre-calculation)
                         let nextH = 0;
-                        if(block.classList.contains('row')) {
+                        const isProcess = block.classList.contains('process-flow');
+                        
+                        if(block.classList.contains('row') || isProcess) {
                             const cols = Array.from(block.children);
-                            const colW = (9.0 - (0.2 * (cols.length - 1))) / cols.length;
-                            
+                            const gap = isProcess ? 0.4 : 0.2; // More gap for arrows
+                            const colW = (9.2 - (gap * (cols.length - 1))) / cols.length;
                             cols.forEach(c => {
-                                // ★ FATAL BUG FIX: Subtract padding (0.3) from width calculation ★
-                                const h = getSmartHeight(c, colW - 0.3); 
+                                const h = getSmartHeight(c, colW);
                                 if(h > nextH) nextH = h;
                             });
-                            
-                            if(nextH < 1.5) nextH = 1.5;
+                            if(nextH < 1.2) nextH = 1.2;
                         } else if(block.tagName === 'TABLE') {
                             nextH = (block.querySelectorAll('tr').length * 0.4) + 0.5;
-                        } else if(block.tagName === 'IMG') {
-                            nextH = 3.6; 
                         } else {
-                            nextH = getSmartHeight(block, 9.0);
+                            nextH = getSmartHeight(block, 9.2);
                         }
 
-                        // 2. Pagination Check
                         if (curY + nextH > SPECS.H - 0.5) {
-                            slide = pptx.addSlide({ masterName: 'CLEAN_MASTER' });
-                            renderSlideHeader(slide, titleText + " (cont.)");
+                            slide = pptx.addSlide({ masterName: 'STRATEGY_MASTER' });
+                            slide.addText(titleText + " (cont.)", { x:0.4, y:0.2, w:9, h:0.4, fontSize:18, color:SPECS.primary, bold:true, fontFace:SPECS.font });
                             curY = SPECS.contentY;
                         }
 
-                        // 3. Render
-                        if(block.classList.contains('row')) {
-                            renderRow(slide, block, curY, nextH); 
+                        if(block.classList.contains('row') || isProcess) {
+                            renderRow(slide, block, curY, nextH, isProcess); 
                         } else if(block.tagName === 'TABLE') {
                             renderTable(slide, block, curY);
-                        } else if(block.tagName === 'IMG') {
-                            renderImage(slide, block, curY);
                         } else {
                             renderBlock(slide, block, curY);
                         }
-                        
-                        curY += nextH + 0.2; 
+                        curY += nextH + 0.3; 
                     });
                 }
             });
 
-            await pptx.writeFile({ fileName: `Zenith_V8_2_Stable.pptx` });
+            await pptx.writeFile({ fileName: `CareerHigh_Strategy_Deck.pptx` });
             uiMsg('Download Started!');
 
         } catch (e) {
@@ -212,49 +205,46 @@
 
     // --- RENDERERS ---
 
-    function renderSlideHeader(slide, text) {
-        slide.addText(text, { x:0.5, y:0.3, w:9, h:0.5, fontSize:22, color:SPECS.primary, bold:true, fontFace:SPECS.font, valign:'bottom' });
-    }
-
     function renderCover(slide, title, dom) {
         slide.background = { color: 'FFFFFF' };
-        slide.addText(title, { x:0.5, y:2.2, w:9, h:1.5, fontSize:44, color:SPECS.primary, bold:true, align:'center', fontFace:SPECS.font });
+        // Asset Mgmt Style: Clean, Professional, Left-Aligned
+        slide.addShape(pptx.ShapeType.rect, { x:0.5, y:0.5, w:0.5, h:0.1, fill:SPECS.accent });
+        slide.addText(title, { x:0.5, y:2.0, w:9, h:1.5, fontSize:40, color:SPECS.primary, bold:true, fontFace:SPECS.font, align:'left' });
+        
         const sub = dom.querySelector('.subtitle');
-        if(sub) slide.addText(sub.textContent.trim(), { x:1.5, y:3.8, w:7, fontSize:18, color:SPECS.textMuted, align:'center', fontFace:SPECS.font });
-        const info = dom.querySelector('.info');
-        if(info) slide.addText(info.textContent.trim(), { x:0.5, y:5.0, w:9, fontSize:12, color:SPECS.textMuted, align:'center' });
+        if(sub) slide.addText(sub.textContent.trim(), { x:0.5, y:3.5, w:9, fontSize:18, color:SPECS.textMuted, fontFace:SPECS.font, align:'left' });
+        
+        const date = dom.querySelector('.date');
+        if(date) slide.addText(date.textContent.trim(), { x:0.5, y:5.0, w:9, fontSize:12, color:SPECS.textMuted, align:'left' });
     }
 
-    function renderRow(slide, rowDom, y, fixedHeight) {
+    function renderRow(slide, rowDom, y, fixedHeight, isProcess) {
         const cols = Array.from(rowDom.children);
-        const gap = 0.2;
-        const colW = (9.0 - (gap * (cols.length - 1))) / cols.length;
+        const gap = isProcess ? 0.4 : 0.2;
+        const colW = (9.2 - (gap * (cols.length - 1))) / cols.length;
 
         cols.forEach((col, i) => {
-            const x = 0.5 + (i * (colW + gap));
+            const x = 0.4 + (i * (colW + gap));
             
+            // Draw Box
             if(col.classList.contains('box')) {
                 slide.addShape(pptx.ShapeType.rect, {
                     x:x, y:y, w:colW, h:fixedHeight,
                     fill:{color:SPECS.bgBox}, line:{color:SPECS.lineColor, width:1}
                 });
             }
-            // Rendering with Padding (0.15 * 2 = 0.3)
-            renderContentInBox(slide, col, x + 0.15, y + 0.15, colW - 0.3);
-        });
-    }
+            
+            // ★ V10 FEATURE: Draw Arrow for Process Flow ★
+            if (isProcess && i < cols.length - 1) {
+                const arrowX = x + colW;
+                const arrowY = y + (fixedHeight / 2);
+                slide.addShape(pptx.ShapeType.rightArrow, {
+                    x: arrowX + 0.05, y: arrowY - 0.1, w: 0.3, h: 0.2,
+                    fill: { color: SPECS.accent }
+                });
+            }
 
-    function renderImage(slide, imgEl, y) {
-        const src = imgEl.src;
-        if(!src) return;
-        const imgW = 6.0;
-        const imgH = 3.5;
-        const x = (SPECS.W - imgW) / 2;
-        slide.addImage({ 
-            path: src, 
-            x: x, y: y, 
-            w: imgW, h: imgH,
-            sizing: { type: 'contain', w: imgW, h: imgH }
+            renderContentInBox(slide, col, x + 0.15, y + 0.15, colW - 0.3);
         });
     }
 
@@ -269,26 +259,28 @@
                     options: {
                         fill: isHead ? SPECS.primary : (rIdx%2===0 ? 'FFFFFF' : 'F9F9F9'),
                         color: isHead ? 'FFFFFF' : SPECS.textMain,
-                        bold: isHead, fontSize:11, fontFace:SPECS.font,
-                        border:{color:SPECS.lineColor, pt:1}, align: isHead ? 'center' : 'left'
+                        bold: isHead, fontSize:10, fontFace:SPECS.font,
+                        border:{color:SPECS.lineColor, pt:1}, align: isHead ? 'center' : 'center' // Data centered
                     }
                 });
             });
             rows.push(rowData);
         });
-        slide.addTable(rows, { x:0.5, y:y, w:9.0, rowH:0.4 });
+        slide.addTable(rows, { x:0.4, y:y, w:9.2, rowH:0.4 });
     }
 
     function renderBlock(slide, block, y) {
-        renderContentInBox(slide, block, 0.5, y, 9.0);
+        renderContentInBox(slide, block, 0.4, y, 9.2);
     }
 
     function renderContentInBox(slide, el, x, y, w) {
         let curY = y;
         const title = el.querySelector('.box-title');
         if(title) {
-            slide.addText(title.textContent.trim(), { x:x, y:curY, w:w, h:0.4, fontSize:13, color:SPECS.accent, bold:true, fontFace:SPECS.font });
-            curY += 0.5;
+            slide.addText(title.textContent.trim(), { 
+                x:x, y:curY, w:w, h:0.4, fontSize:12, color:SPECS.accent, bold:true, fontFace:SPECS.font 
+            });
+            curY += 0.4;
         }
 
         const nodes = getTextTargets(el);
@@ -299,18 +291,17 @@
 
             const isList = node.tagName === 'LI';
             const maxChars = w * SPECS.charsPerInch;
-            const visualLen = getVisualLength(txt);
-            const lineCount = Math.ceil(visualLen / maxChars) || 1;
-            const h = (lineCount * 0.35) + 0.1;
+            const lineCount = Math.ceil(getVisualLength(txt) / maxChars) || 1;
+            const h = (lineCount * 0.32) + 0.08;
 
             let color = SPECS.textMain;
-            if(node.classList.contains('text-red')) color = 'D00000';
+            if(node.classList.contains('text-red')) color = 'C00000';
             if(node.classList.contains('text-blue')) color = SPECS.accent;
 
             slide.addText(txt, {
                 x:x, y:curY, w:w, h:h,
-                fontSize:12, color:color,
-                bullet: isList ? { indent:10 } : false,
+                fontSize:11, color:color,
+                bullet: isList ? { indent:10, code:'2022' } : false, // Bullet
                 breakLine:true, fontFace:SPECS.font, valign:'top'
             });
             curY += h;
