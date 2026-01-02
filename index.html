@@ -9,52 +9,77 @@
   <script src="https://cdn.jsdelivr.net/npm/pptxgenjs@3.12.0/dist/pptxgen.min.js"></script>
 
   <style>
-    /* ZENITH UI Style */
-    :root { --core: #6366f1; --bg: #0f172a; --panel: #1e293b; --text: #f8fafc; --input-bg: #1e293b; }
+    /* ZENITH UI System */
+    :root { 
+        --core: #6366f1; 
+        --bg: #0f172a; 
+        --panel: #1e293b; 
+        --text: #f8fafc; 
+        --input-bg: #1e293b; 
+        --success: #10b981;
+        --danger: #ef4444;
+    }
+    
     * { margin:0; padding:0; box-sizing:border-box; }
     
     body { 
-        font-family: 'Pretendard', sans-serif; 
+        font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif; 
         background: var(--bg); color: var(--text); 
         height: 100vh; display: flex; overflow: hidden; 
     }
     
-    .layout { display: grid; grid-template-columns: 300px 1fr; width: 100%; height: 100%; }
+    .layout { display: grid; grid-template-columns: 320px 1fr; width: 100%; height: 100%; }
     
-    /* Control Panel */
+    /* Left: Control Panel */
     .sidebar { 
         background: var(--panel); border-right: 1px solid #334155; 
-        padding: 25px; display: flex; flex-direction: column; gap: 15px; 
+        padding: 25px; display: flex; flex-direction: column; gap: 20px; 
+        box-shadow: 4px 0 20px rgba(0,0,0,0.2); z-index: 10;
     }
-    .brand { font-size: 20px; font-weight: 900; color: #fff; margin-bottom: 20px; }
+    
+    .brand { font-size: 22px; font-weight: 900; color: #fff; letter-spacing: -0.5px; }
     .brand span { color: var(--core); }
     
-    .desc { font-size: 13px; color: #94a3b8; line-height: 1.5; margin-bottom: 20px; }
+    .guide-box {
+        background: rgba(255,255,255,0.05); border-radius: 10px; padding: 15px;
+        font-size: 13px; color: #cbd5e1; line-height: 1.6; border: 1px solid rgba(255,255,255,0.1);
+    }
+    .guide-box strong { color: #fff; display: block; margin-bottom: 8px; }
+
+    /* Status & Button */
+    .status-area { margin-top: auto; text-align: center; }
+    #msgBox { font-size: 13px; font-weight: 600; margin-bottom: 10px; min-height: 20px; }
     
     .btn-generate { 
-        background: var(--core); color: white; border: none; 
-        padding: 16px; border-radius: 8px; font-weight: 700; font-size: 14px; 
-        cursor: pointer; margin-top: auto; transition: 0.2s; 
+        background: linear-gradient(135deg, var(--core) 0%, #4f46e5 100%); 
+        color: white; border: none; width: 100%;
+        padding: 16px; border-radius: 12px; font-weight: 700; font-size: 15px; 
+        cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
     }
-    .btn-generate:hover { background: #4f46e5; }
-    .btn-generate:disabled { background: #475569; cursor: progress; }
+    .btn-generate:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(99, 102, 241, 0.6); }
+    .btn-generate:disabled { background: #475569; cursor: not-allowed; transform: none; box-shadow: none; }
 
-    /* Editor Area */
+    /* Right: Editor Area */
     .editor-area { display: flex; flex-direction: column; background: #0b0f19; position: relative; }
-    .editor-label { 
-        padding: 12px 30px; background: #0f172a; border-bottom: 1px solid #334155; 
+    
+    .editor-header { 
+        padding: 15px 30px; background: #0f172a; border-bottom: 1px solid #334155; 
         font-size: 12px; color: #64748b; font-weight: bold; letter-spacing: 1px; 
+        display: flex; justify-content: space-between; align-items: center;
     }
     
     textarea { 
-        flex: 1; width: 100%; border: none; padding: 30px; 
+        flex: 1; width: 100%; border: none; padding: 40px; 
         background: transparent; color: #e2e8f0; 
-        font-family: 'D2Coding', 'Consolas', monospace; font-size: 13px; line-height: 1.6; 
+        font-family: 'D2Coding', 'Consolas', monospace; font-size: 14px; line-height: 1.6; 
         resize: none; outline: none; 
     }
-    textarea::placeholder { color: #475569; }
+    textarea::placeholder { color: #334155; }
 
-    #msgBox { text-align: center; font-size: 12px; min-height: 18px; color: #10b981; }
+    /* Scrollbar */
+    textarea::-webkit-scrollbar { width: 10px; }
+    textarea::-webkit-scrollbar-track { background: #0b0f19; }
+    textarea::-webkit-scrollbar-thumb { background: #334155; border-radius: 5px; }
   </style>
 </head>
 <body>
@@ -62,20 +87,27 @@
 <div class="layout">
     <div class="sidebar">
         <div class="brand">ZENITH <span>ENGINE</span></div>
-        <div class="desc">
-            <strong>How to use:</strong><br><br>
-            1. PDF 내용을 프롬프트에 입력<br>
-            2. AI가 생성한 HTML 코드 복사<br>
-            3. 우측 화면에 붙여넣기<br>
-            4. 하단 버튼 클릭
+        
+        <div class="guide-box">
+            <strong>🚀 User Guide</strong>
+            1. 프롬프트를 사용해 AI에게 HTML 코드를 요청하세요.<br>
+            2. 생성된 <code>&lt;!DOCTYPE html&gt;</code> 코드를 복사하세요.<br>
+            3. 우측 입력창에 붙여넣으세요.<br>
+            4. 하단 버튼을 눌러 변환하세요.
         </div>
-        <div id="msgBox"></div>
-        <button id="genBtn" class="btn-generate">CONVERT TO PPTX</button>
+
+        <div class="status-area">
+            <div id="msgBox">Ready to Build</div>
+            <button id="genBtn" class="btn-generate">CONVERT TO PPTX</button>
+        </div>
     </div>
 
     <div class="editor-area">
-        <div class="editor-label">PASTE YOUR HTML CODE HERE</div>
-        <textarea id="input" placeholder='ここに AI가 생성한 <!DOCTYPE html> 코드를 통째로 붙여넣으세요...'></textarea>
+        <div class="editor-header">
+            <span>SOURCE CODE INPUT</span>
+            <span>UTF-8 MODE</span>
+        </div>
+        <textarea id="input" placeholder="여기에 AI가 만들어준 HTML 코드를 붙여넣으세요..."></textarea>
     </div>
 </div>
 
@@ -84,21 +116,20 @@
     const input = document.getElementById('input');
     const msgBox = document.getElementById('msgBox');
     
-    // ★ 전역 변수 (필수) ★
+    // ★ Global Scope Variable (Critical)
     let pptx;
 
-    // 설정값 (디자인 수정 가능)
+    // ★ Configuration (Hanwha & Layout)
     const CONF = {
-        primary: '0071EC', // 한화 오렌지/블루 계열 (원하는 색상 코드로 변경 가능)
+        primary: '0071EC', // Hanwha Blue/Orange Logic can be mapped here
         danger: 'DC2626',
         success: '059669',
         text: '1F2937',
         muted: '4B5563',
         bgBox: 'F3F4F6',
         line: 'E5E7EB',
-        font: "Malgun Gothic", // 맑은 고딕 (시스템 폰트)
+        font: "Malgun Gothic",
         
-        // 레이아웃 수치
         slideH: 5.625,
         footerY: 5.2,
         margin: 0.5,
@@ -106,12 +137,14 @@
         headerBottom: 1.4
     };
 
-    function uiMsg(txt, isErr) {
+    function uiMsg(txt, type) {
         msgBox.textContent = txt;
-        msgBox.style.color = isErr ? '#EF4444' : '#10B981';
+        if(type === 'error') msgBox.style.color = '#ef4444';
+        else if(type === 'success') msgBox.style.color = '#10b981';
+        else msgBox.style.color = '#cbd5e1';
     }
 
-    // 텍스트 추출 헬퍼 (Fix 적용됨)
+    // ★ Text Parser Helper (Fixes empty slides)
     function getTextTargets(el) {
         let targets = [];
         if (el.matches && el.matches('p, li, .box-text')) targets.push(el);
@@ -122,39 +155,39 @@
 
     genBtn.addEventListener('click', async () => {
         const html = input.value.trim();
-        if(!html) return uiMsg('코드를 붙여넣어 주세요!', true);
+        if(!html) return uiMsg('코드를 붙여넣어 주세요!', 'error');
 
-        uiMsg('Processing...');
+        uiMsg('Processing...', 'normal');
         genBtn.disabled = true;
         genBtn.textContent = 'BUILDING...';
 
         try {
+            // 1. Initialize PPTX
             if (typeof window.PptxGenJS === 'function') pptx = new window.PptxGenJS();
             else pptx = new PptxGenJS();
             
             pptx.layout = 'LAYOUT_16x9';
             pptx.author = 'Zenith Engine';
 
-            // HTML 파싱
+            // 2. Parse HTML
             const parser = new DOMParser();
             const doc = parser.parseFromString(html, 'text/html');
             const slides = doc.querySelectorAll('.slide');
 
             if(slides.length === 0) throw new Error("No <div class='slide'> found.");
 
+            // 3. Build Slides
             slides.forEach((slideElem, idx) => {
-                // 헤더 정보 추출
                 const titleNode = slideElem.querySelector('.action-title, h1');
-                const titleText = titleNode ? titleNode.textContent.trim() : 'Untitled Slide';
+                const titleText = titleNode ? titleNode.textContent.trim() : 'Untitled';
                 const isCover = (idx === 0 && slideElem.querySelector('.big-stat'));
 
                 let slide = pptx.addSlide();
                 let curY = renderHeader(slide, titleText, isCover, slideElem);
                 let pageIndex = 1;
 
-                if(isCover) return; // 표지는 여기서 끝
+                if(isCover) return; 
 
-                // 본문 블록 추출
                 const contentDiv = slideElem.querySelector('.content') || slideElem;
                 const blocks = Array.from(contentDiv.children).filter(el => 
                     !el.classList.contains('header') && 
@@ -162,9 +195,8 @@
                     !el.classList.contains('footer')
                 );
 
-                // 블록 루프
                 blocks.forEach(block => {
-                    // 높이 계산
+                    // Height Calculation
                     let blockHeight = 0;
                     let isRow = block.classList.contains('row');
 
@@ -186,7 +218,7 @@
                         }
                     }
 
-                    // 오토 페이징 (넘치면 새 슬라이드)
+                    // Auto Pagination
                     if (curY + blockHeight > CONF.footerY) {
                         slide = pptx.addSlide();
                         pageIndex++;
@@ -194,29 +226,29 @@
                         curY = CONF.headerBottom;
                     }
 
-                    // 렌더링
+                    // Render
                     if (isRow) renderRow(slide, block, curY, blockHeight);
                     else renderBlock(slide, block, curY, blockHeight);
                     
-                    curY += blockHeight + 0.3; // 마진
+                    curY += blockHeight + 0.3;
                 });
             });
 
-            // 파일 다운로드
+            // 4. Download
             await pptx.writeFile({ fileName: 'Zenith_Output.pptx' });
-            uiMsg('Completed!', false);
+            uiMsg('Completed!', 'success');
             genBtn.textContent = 'CONVERT TO PPTX';
 
         } catch (e) {
             console.error(e);
-            uiMsg('Error: ' + e.message, true);
+            uiMsg('Error: ' + e.message, 'error');
             genBtn.textContent = 'RETRY';
         } finally {
             genBtn.disabled = false;
         }
     });
 
-    // --- 렌더링 엔진 함수들 ---
+    // --- Core Engine Functions ---
 
     function renderHeader(slide, text, isCover, dom) {
         slide.background = { color: 'FFFFFF' };
